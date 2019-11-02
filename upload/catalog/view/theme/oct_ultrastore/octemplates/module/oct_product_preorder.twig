@@ -1,0 +1,119 @@
+<div id="popup-product-preorder-wrapper" class="white-popup mfp-with-anim middle-popup">
+    <h2 class="popup-header">{{ heading_title }}</h2>
+    <div class="row">
+        <div class="popup-text col-md-6">
+            {% if thumb %}
+            <img src="{{ thumb }}" class="img-responsive" />
+            {% endif %}
+            {% if heading_title_product %}
+            <h3 class="popup-h3 blue">{{ heading_title_product }}</h3>
+            {% endif %}
+            {% if price %}
+            <div class="product-price">
+                {% if special %}
+                <span id="main-price">{{ price }}</span>
+                {% else %}
+                <span id="special-price">{{ price }}</span>
+                <span id="main-price" class="prise-old">{{ special }}</span>
+                {% endif %}
+            </div>
+            {% endif %}
+            {% if text_promo %}
+            <div class="popup-promo-text">{{ text_promo }}</div>
+            {% endif %}
+        </div>
+        <form method="post" enctype="multipart/form-data" id="product-preorder-form" class="col-md-6">
+            <div class="popup-form-box">
+                {% if oct_product_preorder_data.name %}
+                <input type="text" class="input-text" name="name" value="{{ name }}" placeholder="{{ enter_name }}" />
+                {% endif %}
+                {% if oct_product_preorder_data.telephone %}
+                <input type="text" class="input-text" name="telephone" value="{{ telephone }}" placeholder="{{ enter_telephone }}" />
+                    {% if mask %}
+                    <script>
+                        var isMobile = {
+                            Android: function() {
+                                return navigator.userAgent.match(/Android/i);
+                            },
+                            BlackBerry: function() {
+                                return navigator.userAgent.match(/BlackBerry/i);
+                            },
+                            iOS: function() {
+                                return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+                            },
+                            Opera: function() {
+                                return navigator.userAgent.match(/Opera Mini/i);
+                            },
+                            Windows: function() {
+                                return navigator.userAgent.match(/IEMobile/i);
+                            },
+                            Chrome: function() {
+                                return navigator.userAgent.match(/Chrome/i);
+                            }
+                        };
+
+                        if (!isMobile.Android() ) {
+                            $("#popup-product-preorder-wrapper [name='telephone']").inputmask('{{ mask }}');
+                        }
+                    </script>
+                    {% endif %}
+                {% endif %}
+                {% if oct_product_preorder_data.email %}
+                <input type="text" class="input-text" name="email" value="{{ email }}" placeholder="{{ enter_email }}" />
+                {% endif %}
+                {% if oct_product_preorder_data.comment %}
+                <textarea name="comment" placeholder="{{ enter_comment }}">{{ comment }}</textarea>
+                {% endif %}
+                {% if text_terms %}
+                <div>
+                    {{ text_terms }} <input type="checkbox" name="terms" value="1" style="width:auto;height:auto;display:inline-block;margin: 0;" />
+                </div>
+                {% endif %}
+            </div>
+            <input type="hidden" name="pid" value="{{ href }}">
+            <input type="hidden" name="mid" value="{{ model }}">
+        </form>
+    </div>
+    <div class="popup-buttons-box">
+        <button class="oct-button" title="{{ button_send }}" type="button" id="popup-send-button">{{ button_send }}</button>
+    </div>
+    <script><!--
+        function masked(element, status) {
+            if (status == true) {
+                $('<div/>')
+                    .attr({ 'class':'masked' })
+                    .prependTo(element);
+                $('<div class="masked_loading" />').insertAfter($('.masked'));
+            } else {
+                $('.masked').remove();
+                $('.masked_loading').remove();
+            }
+        }
+        $('#popup-send-button').on('click', function() {
+            masked('#popup-product-preorder-wrapper', true);
+            $.ajax({
+                type: 'post',
+                url:  'index.php?route=extension/module/oct_product_preorder/send',
+                dataType: 'json',
+                data: $('#product-preorder-form').serialize(),
+                success: function(json) {
+                    if (json['error']) {
+                        if (json['error']['field']) {
+                            masked('#popup-product-preorder-wrapper', false);
+                            $('.text-danger').remove();
+                            $.each(json['error']['field'], function(i, val) {
+                                $('[name="' + i + '"]').addClass('error_style').after('<div class="text-danger">' + val + '</div>');
+                            });
+                        }
+                    } else {
+                        if (json['output']) {
+                            masked('#popup-product-preorder-wrapper', false);
+                            $('#popup-product-preorder-wrapper > .popup-buttons-box').remove();
+                            $('#popup-product-preorder-wrapper > .row').html(json['output']);
+                        }
+                    }
+                }
+            });
+        });
+        //--></script>
+</div>
