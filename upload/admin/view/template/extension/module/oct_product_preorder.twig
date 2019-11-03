@@ -8,16 +8,16 @@
             <h1>{{ heading_title }}</h1>
             <ul class="breadcrumb">
                 {% for breabcumb in breadcumbs %}
-                <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+                    <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
                 {% endfor %}
             </ul>
         </div>
     </div>
     <div class="container-fluid">
         {% if error_warning %}
-        <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-        </div>
+            <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
         {% endif %}
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -36,11 +36,11 @@
                                 <div class="col-sm-10">
                                     <select name="oct_product_preorder_data[status]" id="input-status" class="form-control">
                                         {% if oct_product_preorder_data.status %}
-                                        <option value="1" selected="selected">{{ text_enabled }}</option>
-                                        <option value="0">{{ text_disabled }}</option>
+                                            <option value="1" selected="selected">{{ text_enabled }}</option>
+                                            <option value="0">{{ text_disabled }}</option>
                                         {% else %}
-                                        <option value="1">{{ text_enabled }}</option>
-                                        <option value="0" selected="selected">{{ text_disabled }}</option>
+                                            <option value="1">{{ text_enabled }}</option>
+                                            <option value="0" selected="selected">{{ text_disabled }}</option>
                                         {% endif %}
                                     </select>
                                 </div>
@@ -50,11 +50,11 @@
                                 <div class="col-sm-10">
                                     <select name="oct_product_preorder_data[notify_status]" id="input-notify_status" class="form-control">
                                         {% if oct_product_preorder_data.notify_status %}
-                                        <option value="1" selected="selected">{{ text_enabled }}</option>
-                                        <option value="0">{{ text_disabled }}</option>
+                                            <option value="1" selected="selected">{{ text_enabled }}</option>
+                                            <option value="0">{{ text_disabled }}</option>
                                         {% else %}
-                                        <option value="1">{{ text_enabled }}</option>
-                                        <option value="0" selected="selected">{{ text_disabled }}</option>
+                                            <option value="1">{{ text_enabled }}</option>
+                                            <option value="0" selected="selected">{{ text_disabled }}</option>
                                         {% endif %}
                                     </select>
                                 </div>
@@ -64,7 +64,7 @@
                                 <div class="col-sm-10">
                                     <input type="text" name="oct_product_preorder_data[notify_email]" value="{{ oct_product_preorder_data.notify_email }}" id="input-notify_email" class="form-control" />
                                     {% if error_notify_email %}
-                                    <div class="text-danger">{{ error_notify_email }}</div>
+                                        <div class="text-danger">{{ error_notify_email }}</div>
                                     {% endif %}
                                 </div>
                             </div>
@@ -73,17 +73,17 @@
                                 <div class="col-sm-10">
                                     <select name="oct_product_preorder_data[name]" id="input-name" class="form-control">
                                         {% if oct_product_preorder_data.name == 1 %}
-                                        <option value="1" selected="selected">{{ text_enabled }}</option>
-                                        <option value="2">{{ text_enabled_required }}</option>
-                                        <option value="0">{{ text_disabled }}</option>
+                                            <option value="1" selected="selected">{{ text_enabled }}</option>
+                                            <option value="2">{{ text_enabled_required }}</option>
+                                            <option value="0">{{ text_disabled }}</option>
                                         {% elseif oct_product_preorder_data.name == 2 %}
-                                        <option value="1">{{ text_enabled }}</option>
-                                        <option value="2" selected="selected">{{ text_enabled_required }}</option>
-                                        <option value="0">{{ text_disabled }}</option>
+                                            <option value="1">{{ text_enabled }}</option>
+                                            <option value="2" selected="selected">{{ text_enabled_required }}</option>
+                                            <option value="0">{{ text_disabled }}</option>
                                         {% else %}
-                                        <option value="1">{{ text_enabled }}</option>
-                                        <option value="2">{{ text_enabled_required }}</option>
-                                        <option value="0" selected="selected">{{ text_disabled }}</option>
+                                            <option value="1">{{ text_enabled }}</option>
+                                            <option value="2">{{ text_enabled_required }}</option>
+                                            <option value="0" selected="selected">{{ text_disabled }}</option>
                                         {% endif %}
                                     </select>
                                 </div>
@@ -93,17 +93,17 @@
                                 <div class="col-sm-10">
                                     <select name="oct_product_preorder_data[telephone]" id="input-telephone" class="form-control">
                                         {% if oct_product_preorder_data.telephone == 1 %}
-                                        <option value="1" selected="selected">{{ text_enabled }}</option>
-                                        <option value="2">{{ text_enabled_required }}</option>
-                                        <option value="0">{{ text_disabled }}</option>
+                                            <option value="1" selected="selected">{{ text_enabled }}</option>
+                                            <option value="2">{{ text_enabled_required }}</option>
+                                            <option value="0">{{ text_disabled }}</option>
                                         {% elseif oct_product_preorder_data.telephone == 2 %}
-                                        <option value="1">{{ text_enabled }}</option>
-                                        <option value="2" selected="selected">{{ text_enabled_required }}</option>
-                                        <option value="0">{{ text_disabled }}</option>
+                                            <option value="1">{{ text_enabled }}</option>
+                                            <option value="2" selected="selected">{{ text_enabled_required }}</option>
+                                            <option value="0">{{ text_disabled }}</option>
                                         {% else %}
-                                        <option value="1">{{ text_enabled }}</option>
-                                        <option value="2">{{ text_enabled_required }}</option>
-                                        <option value="0" selected="selected">{{ text_disabled }}</option>
+                                            <option value="1">{{ text_enabled }}</option>
+                                            <option value="2">{{ text_enabled_required }}</option>
+                                            <option value="0" selected="selected">{{ text_disabled }}</option>
                                         {% endif %}
                                     </select>
                                 </div>
@@ -113,17 +113,17 @@
                                 <div class="col-sm-10">
                                     <select name="oct_product_preorder_data[comment]" id="input-comment" class="form-control">
                                         {% if oct_product_preorder_data.comment == 1 %}
-                                        <option value="1" selected="selected">{{ text_enabled }}</option>
-                                        <option value="2">{{ text_enabled_required }}</option>
-                                        <option value="0">{{ text_disabled }}</option>
+                                            <option value="1" selected="selected">{{ text_enabled }}</option>
+                                            <option value="2">{{ text_enabled_required }}</option>
+                                            <option value="0">{{ text_disabled }}</option>
                                         {% elseif oct_product_preorder_data.comment == 2 %}
-                                        <option value="1">{{ text_enabled }}</option>
-                                        <option value="2" selected="selected">{{ text_enabled_required }}</option>
-                                        <option value="0">{{ text_disabled }}</option>
+                                            <option value="1">{{ text_enabled }}</option>
+                                            <option value="2" selected="selected">{{ text_enabled_required }}</option>
+                                            <option value="0">{{ text_disabled }}</option>
                                         {% else %}
-                                        <option value="1">{{ text_enabled }}</option>
-                                        <option value="2">{{ text_enabled_required }}</option>
-                                        <option value="0" selected="selected">{{ text_disabled }}</option>
+                                            <option value="1">{{ text_enabled }}</option>
+                                            <option value="2">{{ text_enabled_required }}</option>
+                                            <option value="0" selected="selected">{{ text_disabled }}</option>
                                         {% endif %}
                                     </select>
                                 </div>
@@ -133,17 +133,17 @@
                                 <div class="col-sm-10">
                                     <select name="oct_product_preorder_data[email]" id="input-email" class="form-control">
                                         {% if oct_product_preorder_data.email == 1 %}
-                                        <option value="1" selected="selected">{{ text_enabled }}</option>
-                                        <option value="2">{{ text_enabled_required }}</option>
-                                        <option value="0">{{ text_disabled }}</option>
+                                            <option value="1" selected="selected">{{ text_enabled }}</option>
+                                            <option value="2">{{ text_enabled_required }}</option>
+                                            <option value="0">{{ text_disabled }}</option>
                                         {% elseif oct_product_preorder_data.email == 2 %}
-                                        <option value="1">{{ text_enabled }}</option>
-                                        <option value="2" selected="selected">{{ text_enabled_required }}</option>
-                                        <option value="0">{{ text_disabled }}</option>
+                                            <option value="1">{{ text_enabled }}</option>
+                                            <option value="2" selected="selected">{{ text_enabled_required }}</option>
+                                            <option value="0">{{ text_disabled }}</option>
                                         {% else %}
-                                        <option value="1">{{ text_enabled }}</option>
-                                        <option value="2">{{ text_enabled_required }}</option>
-                                        <option value="0" selected="selected">{{ text_disabled }}</option>
+                                            <option value="1">{{ text_enabled }}</option>
+                                            <option value="2">{{ text_enabled_required }}</option>
+                                            <option value="0" selected="selected">{{ text_disabled }}</option>
                                         {% endif %}
                                     </select>
                                 </div>
@@ -159,15 +159,15 @@
                                 <div class="col-sm-10">
                                     <div class="well well-sm" style="height: 150px; overflow: auto;">
                                         {% for stock_status in stock_statuses %}
-                                        <div class="checkbox">
-                                            <label>
-                                                <input
-                                                        type="checkbox"
-                                                        name="oct_product_preorder_data[stock_statuses][{{ stock_status.stock_status_id }}]"
-                                                        value="{{ stock_status.stock_status_id }}" {% if oct_product_preorder_data.stock_statuses.stock_status_id is not empty %}checked{% else %}{% endif %}
-                                                /> {{ stock_status.name }}
-                                            </label>
-                                        </div>
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input
+                                                            type="checkbox"
+                                                            name="oct_product_preorder_data[stock_statuses][{{ stock_status.stock_status_id }}]"
+                                                            value="{{ stock_status.stock_status_id }}" {% if oct_product_preorder_data['stock_statuses'][stock_status.stock_status_id] is not empty %}checked{% else %}{% endif %}
+                                                    /> {{ stock_status.name }}
+                                                </label>
+                                            </div>
                                         {% endfor %}
                                     </div>
                                 </div>
@@ -177,24 +177,24 @@
                                 <div class="col-sm-10">
                                     <ul class="nav nav-tabs" id="call_button">
                                         {% for language in languages %}
-                                        <li>
-                                            <a href="#tab-call_button-language{{ language.language_id }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> {{ language.name }}</a>
-                                        </li>
+                                            <li>
+                                                <a href="#tab-call_button-language{{ language.language_id }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> {{ language.name }}</a>
+                                            </li>
                                         {% endfor %}
                                     </ul>
                                     <div class="tab-content">
                                         {% for language in languages %}
-                                        <div class="tab-pane" id="tab-call_button-language{{ language.language_id }}">
-                                            <input
-                                                    type="text"
-                                                    name="oct_product_preorder_text[{{ language.code }}][call_button]"
-                                                    value="{% for lang_code in oct_product_preorder_text.language.code %}{% if lang_code.call_button is not empty %}{{ lang_code.call_button }}{% else %}{% endif %}{% endfor %}"
-                                                    class="form-control"
-                                            />
-                                            {% if error_call_button.language.code %}
-                                            <div class="text-danger">{{ error_call_button.language.code }}</div>
-                                            {% endif %}
-                                        </div>
+                                            <div class="tab-pane" id="tab-call_button-language{{ language.language_id }}">
+                                                <input
+                                                        type="text"
+                                                        name="oct_product_preorder_text[{{ language.code }}][call_button]"
+                                                        value="{% if oct_product_preorder_text[language.code].call_button is not empty %}{{ oct_product_preorder_text[language.code].call_button }}{% else %}{% endif %}"
+                                                        class="form-control"
+                                                />
+                                                {% if error_call_button[language.code] %}
+                                                    <div class="text-danger">{{ error_call_button[language.code] }}</div>
+                                                {% endif %}
+                                            </div>
                                         {% endfor %}
                                     </div>
                                 </div>
@@ -204,26 +204,28 @@
                                 <div class="col-sm-10">
                                     <ul class="nav nav-tabs" id="promo">
                                         {% for language in languages %}
-                                        <li>
-                                            <a href="#tab-promo-language{{ language.language_id }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> {{ language.name }}</a>
-                                        </li>
+                                            <li>
+                                                <a href="#tab-promo-language{{ language.language_id }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> {{ language.name }}</a>
+                                            </li>
                                         {% endfor %}
                                     </ul>
                                     <div class="tab-content">
                                         {% for language in languages %}
-                                        <div class="tab-pane" id="tab-promo-language{{ language.language_id }}">
-                      <textarea
-                              id="promo-language{{ language.language_id }}"
-                              class="form-control summernote"
-                              style="height:auto;resize:vertical;"
-                              rows="3"
-                              name="oct_product_preorder_text[{{ language.code }}][promo]">
-                              value="{% for lang_code in oct_product_preorder_text.language.code %}{% if lang_code.promo is not empty %}{{ lang_code.promo }}{% else %}{% endif %}{% endfor %}"
-                      </textarea>
-                                            {% if error_promo.language.code %}
-                                            <div class="text-danger">{{ error_promo.language.code }}</div>
-                                            {% endif %}
-                                        </div>
+                                            <div class="tab-pane" id="tab-promo-language{{ language.language_id }}">
+                                              <textarea
+                                                      id="promo-language{{ language.language_id }}"
+                                                      class="form-control summernote"
+                                                      style="height:auto;resize:vertical;"
+                                                      rows="3"
+                                                      data-toggle="summernote"
+                                                      data-lang="{{ summernote }}"
+                                                      name="oct_product_preorder_text[{{ language.code }}][promo]">
+                                                      {% if oct_product_preorder_text[language.code].promo is not empty %}{{ oct_product_preorder_text[language.code].promo }}{% else %}{% endif %}
+                                              </textarea>
+                                                {% if error_promo[language.code] %}
+                                                    <div class="text-danger">{{ error_promo[language.code] }}</div>
+                                                {% endif %}
+                                            </div>
                                         {% endfor %}
                                     </div>
                                 </div>

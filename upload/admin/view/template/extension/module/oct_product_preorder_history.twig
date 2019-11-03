@@ -1,25 +1,25 @@
 {% if histories %}
-<div class="btn-group">
-    <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-        <i class="fa fa-trash-o"></i> {{ button_delete_menu }} <span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu" role="menu">
-        <li><a onclick="delete_all();">{{ button_delete_all }}</a></li>
-        <li><a onclick="delete_all_selected();">{{ button_delete_selected }}</a></li>
-    </ul>
-</div>
-<br/><br/>
+    <div class="btn-group">
+        <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+            <i class="fa fa-trash-o"></i> {{ button_delete_menu }} <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+            <li><a onclick="delete_all();">{{ button_delete_all }}</a></li>
+            <li><a onclick="delete_all_selected();">{{ button_delete_selected }}</a></li>
+        </ul>
+    </div>
+    <br/><br/>
 {% endif %}
 <div class="table-responsive">
     <table class="table table-bordered">
         <thead>
-            <tr>
-                <td width="1" style="text-align: center;"><input type="checkbox" onclick="$('input[name*=\'selected\']').attr('checked', this.checked);" /></td>
-                <td class="text-left" >{{ column_info }}</td>
-                <td class="text-left">{{ column_note }}</td>
-                <td class="text-left">{{ column_date_added }}</td>
-                <td class="text-center" >{{ column_action }}</td>
-            </tr>
+        <tr>
+            <td width="1" style="text-align: center;"><input type="checkbox" onclick="$('input[name*=\'selected\']').attr('checked', this.checked);" /></td>
+            <td class="text-left" >{{ column_info }}</td>
+            <td class="text-left">{{ column_note }}</td>
+            <td class="text-left">{{ column_date_added }}</td>
+            <td class="text-center" >{{ column_action }}</td>
+        </tr>
         </thead>
         <tbody>
         {% if histories %}
@@ -27,11 +27,11 @@
                 <tr>
                     <td style="text-align: center;"><input type="checkbox" name="selected[]" value="{{ history.request_id }}" /></td>
                     <td class="text-left">
-                    {% if history.info %}
-                        {% for info in history.info %}
-                            <p><strong>{{ info.name }}:</strong> {{ info.value }}</p>
-                        {% endfor %}
-                    {% endif %}
+                        {% if history.info %}
+                            {% for info in history.info %}
+                                <p><strong>{{ info.name }}:</strong> {{ info.value }}</p>
+                            {% endfor %}
+                        {% endif %}
                     </td>
                     <td class="text-left">
                         <textarea name="note" class="form-control" style="margin-bottom:7px;">{{ history.note }}</textarea>
@@ -44,9 +44,9 @@
                 </tr>
             {% endfor %}
         {% else %}
-        <tr>
-            <td class="text-center" colspan="5">{{ text_no_results }}</td>
-        </tr>
+            <tr>
+                <td class="text-center" colspan="5">{{ text_no_results }}</td>
+            </tr>
         {% endif %}
         </tbody>
     </table>
