@@ -55,3 +55,6 @@ $_['column_note'] = 'Note';
 $_['error_permission'] = 'You do not have permission to edit the module!';
 $_['error_notify_email'] = 'The Mail field should not be empty!';
 $_['error_field'] = 'Fill out this field!';
+
+// Lang
+$_['lang'] = 'en-GB';

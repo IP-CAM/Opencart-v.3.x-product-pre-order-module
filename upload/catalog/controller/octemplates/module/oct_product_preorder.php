@@ -6,8 +6,8 @@ class ControllerOctemplatesModuleOctProductPreorder extends Controller {
 
         $this->load->language('octemplates/module/oct_product_preorder');
 
-        if (isset($this->request->get['product_id'])) {
-            $product_id = $this->request->get['product_id'];
+        if (isset($this->request->post['product_id'])) {
+            $product_id = $this->request->post['product_id'];
         } else {
             die();
         }
