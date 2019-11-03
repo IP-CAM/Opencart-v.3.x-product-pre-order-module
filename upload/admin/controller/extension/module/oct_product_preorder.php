@@ -20,7 +20,7 @@ class ControllerExtensionModuleOctProductPreorder extends Controller {
 
             $this->session->data['success'] = $this->language->get('text_success');
 
-            $this->response->redirect($this->url->link('extension/extension', 'user_token=' . $this->session->data['user_token'] . '&type=module', true));
+            $this->response->redirect($this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=module', true));
         }
 
         $data['user_token']    = $this->session->data['user_token'];
@@ -91,7 +91,7 @@ class ControllerExtensionModuleOctProductPreorder extends Controller {
         $data['column_left'] = $this->load->controller('common/column_left');
         $data['footer']      = $this->load->controller('common/footer');
 
-        $this->response->setOutput($this->load->view('extension/module/oct_product_preorder.twig', $data));
+        $this->response->setOutput($this->load->view('extension/module/oct_product_preorder', $data));
     }
 
     public function history() {
@@ -145,7 +145,7 @@ class ControllerExtensionModuleOctProductPreorder extends Controller {
 
         $data['results'] = sprintf($this->language->get('text_pagination'), ($history_total) ? (($page - 1) * 20) + 1 : 0, ((($page - 1) * 20) > ($history_total - 20)) ? $history_total : ((($page - 1) * 20) + 20), $history_total, ceil($history_total / 20));
 
-        $this->response->setOutput($this->load->view('extension/module/oct_product_preorder_history.twig', $data));
+        $this->response->setOutput($this->load->view('extension/module/oct_product_preorder_history', $data));
     }
 
     public function update_note() {
@@ -207,8 +207,8 @@ class ControllerExtensionModuleOctProductPreorder extends Controller {
     public function install() {
         $this->load->language('extension/module/oct_product_preorder');
         $this->load->model('extension/module/oct_product_preorder');
-        $this->load->model('extension/extension');
         $this->load->model('setting/setting');
+        $this->load->model('setting/extension');
         $this->load->model('user/user_group');
         $this->load->model('localisation/language');
 
@@ -241,20 +241,20 @@ class ControllerExtensionModuleOctProductPreorder extends Controller {
             )
         ));
 
-        if (!in_array('oct_product_preorder', $this->model_extension_extension->getInstalled('module'))) {
-            $this->model_extension_extension->install('module', 'oct_product_preorder');
+        if (!in_array('oct_product_preorder', $this->model_setting_extension->getInstalled('module'))) {
+            $this->model_setting_extension->install('module', 'oct_product_preorder');
         }
 
         $this->session->data['success'] = $this->language->get('text_success_install');
     }
 
     public function uninstall() {
-        $this->load->model('extension/extension');
         $this->load->model('setting/setting');
+        $this->load->model('setting/extension');
         $this->load->model('extension/module/oct_product_preorder');
 
         $this->model_extension_module_oct_product_preorder->deleteDB();
-        $this->model_extension_extension->uninstall('module', 'oct_product_preorder');
+        $this->model_setting_extension->uninstall('module', 'oct_product_preorder');
         $this->model_setting_setting->deleteSetting('oct_product_preorder_data');
     }
 
