@@ -1,119 +1,141 @@
-<div id="us-popup-product-preorder-wrapper" class="white-popup mfp-with-anim middle-popup">
-    <h2 class="us-popup-header">{{ heading_title }}</h2>
-    <div class="row">
-        <div class="us-popup-text col-md-6">
-            {% if thumb %}
-            <img src="{{ thumb }}" class="img-responsive" />
-            {% endif %}
-            {% if heading_title_product %}
-            <h3 class="us-popup-h3 blue">{{ heading_title_product }}</h3>
-            {% endif %}
-            {% if price %}
-            <div class="product-price">
-                {% if special %}
-                <span id="main-price">{{ price }}</span>
-                {% else %}
-                <span id="special-price">{{ price }}</span>
-                <span id="main-price" class="prise-old">{{ special }}</span>
-                {% endif %}
+<div class="modal show" id="us-popup-product-preorder-modal" tabindex="-1" role="dialog" aria-labelledby="us-popup-product-preorder" style="display: block;">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="us-popup-product-preorder">{{ heading_title }}</h5>
+                <button type="button" class="us-close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="us-modal-close-icon us-modal-close-left"></span>
+                    <span aria-hidden="true" class="us-modal-close-icon us-modal-close-right"></span>
+                </button>
             </div>
-            {% endif %}
-            {% if text_promo %}
-            <div class="us-popup-promo-text">{{ text_promo }}</div>
-            {% endif %}
-        </div>
-        <form method="post" enctype="multipart/form-data" id="us-product-preorder-form" class="col-md-6">
-            <div class="us-popup-form-box">
-                {% if oct_product_preorder_data.name %}
-                <input type="text" class="input-text" name="name" value="{{ name }}" placeholder="{{ enter_name }}" />
-                {% endif %}
-                {% if oct_product_preorder_data.telephone %}
-                <input type="text" class="input-text" name="telephone" value="{{ telephone }}" placeholder="{{ enter_telephone }}" />
-                    {% if mask %}
-                    <script>
-                        var isMobile = {
-                            Android: function() {
-                                return navigator.userAgent.match(/Android/i);
-                            },
-                            BlackBerry: function() {
-                                return navigator.userAgent.match(/BlackBerry/i);
-                            },
-                            iOS: function() {
-                                return navigator.userAgent.match(/iPhone|iPad|iPod/i);
-                            },
-                            Opera: function() {
-                                return navigator.userAgent.match(/Opera Mini/i);
-                            },
-                            Windows: function() {
-                                return navigator.userAgent.match(/IEMobile/i);
-                            },
-                            Chrome: function() {
-                                return navigator.userAgent.match(/Chrome/i);
-                            }
-                        };
-
-                        if (!isMobile.Android() ) {
-                            $("#us-popup-product-preorder-wrapper [name='telephone']").inputmask('{{ mask }}');
-                        }
-                    </script>
-                    {% endif %}
-                {% endif %}
-                {% if oct_product_preorder_data.email %}
-                <input type="text" class="input-text" name="email" value="{{ email }}" placeholder="{{ enter_email }}" />
-                {% endif %}
-                {% if oct_product_preorder_data.comment %}
-                <textarea name="comment" placeholder="{{ enter_comment }}">{{ comment }}</textarea>
-                {% endif %}
-                {% if text_terms %}
-                <div>
-                    {{ text_terms }} <input type="checkbox" name="terms" value="1" style="width:auto;height:auto;display:inline-block;margin: 0;" />
+            <div id="us-popup-product-preorder-main-block" class="modal-body us-modal-body-popup-product-preorder">
+                <div class="row">
+                    <div class="us-popup-text col-md-6">
+                        {% if thumb %}
+                            <img src="{{ thumb }}" class="img-responsive" />
+                        {% endif %}
+                        {% if heading_title_product %}
+                            <h3 class="us-popup-h3 blue">{{ heading_title_product }}</h3>
+                        {% endif %}
+                        {% if price %}
+                            <div class="product-price">
+                                {% if special %}
+                                    <span id="main-price">{{ price }}</span>
+                                {% else %}
+                                    <span id="special-price">{{ price }}</span>
+                                    <span id="main-price" class="prise-old">{{ special }}</span>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                        {% if text_promo %}
+                            <div class="us-popup-promo-text">{{ text_promo }}</div>
+                        {% endif %}
+                    </div>
+                    <form action="javascript:;" id="us-oct-product-preorder-form" method="post" class="d-flex col-md-6">
+                        <div class="us-popup-form-box">
+                            {% if oct_product_preorder_data.name %}
+                                <div class="form-group-20">
+                                    <input type="text" class="form-control" name="name" id="user-name" value="{{ name }}" placeholder="{{ enter_name }}" />
+                                </div>
+                            {% endif %}
+                            {% if oct_product_preorder_data.telephone %}
+                                <div class="form-group-20">
+                                    <input type="text" class="form-control" name="telephone" id="user-telephone" value="{{ telephone }}" placeholder="{{ enter_telephone }}" />
+                                </div>
+                            {% if mask %}
+                                <script>
+                                    var isMobile = {
+                                        Android: function() {
+                                            return navigator.userAgent.match(/Android/i);
+                                        },
+                                        BlackBerry: function() {
+                                            return navigator.userAgent.match(/BlackBerry/i);
+                                        },
+                                        iOS: function() {
+                                            return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+                                        },
+                                        Opera: function() {
+                                            return navigator.userAgent.match(/Opera Mini/i);
+                                        },
+                                        Windows: function() {
+                                            return navigator.userAgent.match(/IEMobile/i);
+                                        },
+                                        Chrome: function() {
+                                            return navigator.userAgent.match(/Chrome/i);
+                                        }
+                                    };
+                                </script>
+                            {% endif %}
+                            {% endif %}
+                            {% if oct_product_preorder_data.email %}
+                                <div class="form-group-20">
+                                    <input type="text" class="form-control" name="email" id="user-email" value="{{ email }}" placeholder="{{ enter_email }}" />
+                                </div>
+                            {% endif %}
+                            {% if oct_product_preorder_data.comment %}
+                                <div class="form-group-20">
+                                    <textarea class="form-control" name="comment" id="user-comment" placeholder="{{ enter_comment }}">{{ comment }}</textarea>
+                                </div>
+                            {% endif %}
+                            {% if text_terms %}
+                                <div class="us-form-checkbox-group us-form-checkbox-group-20">
+                                    <label for="scales-2" class="d-flex"><span>{{ text_terms }}</span></label>
+                                    <input type="checkbox" id="scales-2" class="us-form-checkbox-input" name="terms">
+                                </div>
+                            {% endif %}
+                        </div>
+                        <input type="hidden" name="pid" value="{{ href }}">
+                        <input type="hidden" name="mid" value="{{ model }}">
+                    </form>
                 </div>
-                {% endif %}
+                <div class="us-popup-buttons-box">
+                    <button class="us-module-btn" title="{{ button_send }}" type="button" id="us-popup-send-button">{{ button_send }}</button>
+                </div>
             </div>
-            <input type="hidden" name="pid" value="{{ href }}">
-            <input type="hidden" name="mid" value="{{ model }}">
-        </form>
+        </div>
     </div>
-    <div class="us-popup-buttons-box">
-        <button class="oct-button" title="{{ button_send }}" type="button" id="us-popup-send-button">{{ button_send }}</button>
-    </div>
-    <script><!--
-        function masked(element, status) {
-            if (status == true) {
-                $('<div/>')
-                    .attr({ 'class':'masked' })
-                    .prependTo(element);
-                $('<div class="masked_loading" />').insertAfter($('.masked'));
+</div>
+{% if  mask is defined and mask is not empty %}
+<script src="catalog/view/javascript/oct_product_preorder/input-mask.js"></script>
+<script>
+$('#us-popup-product-preorder-modal input[name="user-telephone"]').inputmask({'mask': mask});
+{% endif %}
+
+$("#user-name, #user-telephone, #user-email, #user-comment, #scales-2").on("change paste keyup", function() {
+    $(this).removeClass('error_style');
+});
+
+{% if error_stock_check is not defined %}
+$('#us-popup-send-button').on('click', function() {
+    masked('body', false);
+    masked('body', true);
+    $.ajax({
+        type: 'post',
+        dataType: 'json',
+        url: 'index.php?route=octemplates/module/oct_product_preorder/send',
+        data: $('#us-oct-product-preorder-form').serialize(),
+        success: function(json) {
+            masked('body', false);
+            if (json['error']) {
+                $('#us-popup-product-preorder-modal .text-danger').remove();
+                let errorOption = '';
+
+                $.each(json['error']['field'], function(i, val) {
+                    if (val) {
+                        $('# [name="' + i + '"]').addClass('error_style');
+                        errorOption += '<div class="alert-text-item">' + val + '</div>';
+                    }
+                });
+
+                usNotify('danger', errorOption);
             } else {
-                $('.masked').remove();
-                $('.masked_loading').remove();
+                if (json['success']) {
+                    $('.us-module-btn').attr("disabled", "disabled");
+                    $("#us-product-preorder-main-block").html(json['success']).removeClass('us-modal-body-popup-product-preorder');
+                }
             }
         }
-        $('#us-popup-send-button').on('click', function() {
-            masked('#us-popup-product-preorder-wrapper', true);
-            $.ajax({
-                type: 'post',
-                url:  'index.php?route=octemplates/module/oct_product_preorder/send',
-                dataType: 'json',
-                data: $('#us-product-preorder-form').serialize(),
-                success: function(json) {
-                    if (json['error']) {
-                        if (json['error']['field']) {
-                            masked('#us-popup-product-preorder-wrapper', false);
-                            $('.text-danger').remove();
-                            $.each(json['error']['field'], function(i, val) {
-                                $('[name="' + i + '"]').addClass('error_style').after('<div class="text-danger">' + val + '</div>');
-                            });
-                        }
-                    } else {
-                        if (json['output']) {
-                            masked('#us-popup-product-preorder-wrapper', false);
-                            $('#us-popup-product-preorder-wrapper > .us-popup-buttons-box').remove();
-                            $('#us-popup-product-preorder-wrapper > .row').html(json['output']);
-                        }
-                    }
-                }
-            });
-        });
-        //--></script>
-</div>
+    });
+});
+{% endif %}
+</script>

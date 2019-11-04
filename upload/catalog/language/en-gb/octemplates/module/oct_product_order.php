@@ -27,3 +27,5 @@ $_['error_email'] = 'Email is required!';
 $_['error_valid_email'] = 'Email was entered incorrectly!';
 $_['error_telephone'] = 'The phone must be between 3 and 32 characters!';
 $_['error_comment'] = 'Comment must be between 3 and 500 characters!';
+
+$_['text_footer'] = 'If you have any questions, please reply to this message.';

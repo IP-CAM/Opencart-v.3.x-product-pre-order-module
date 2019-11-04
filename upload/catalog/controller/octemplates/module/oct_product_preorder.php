@@ -179,6 +179,50 @@ class ControllerOctemplatesModuleOctProductPreorder extends Controller {
             $json['output'] = $this->language->get('text_success_send');
 
             if ($oct_product_preorder_data['notify_status']) {
+
+                // oct_cool_email_template start
+                $this->load->model('tool/image');
+                $this->load->model('catalog/product');
+
+                $data['oct_ultrastore_data'] = $oct_ultrastore_data = $this->config->get('theme_oct_ultrastore_data');
+
+                $oct_ultrastore_contact_address = $oct_ultrastore_data['contact_address'];
+
+                $results = $this->model_localisation_language->getLanguages();
+
+                if(isset($results[$this->session->data['language']])) {
+                    $lang_id = $results[$this->session->data['language']]['language_id'];
+                }
+
+                if (isset($oct_ultrastore_contact_address[$lang_id]) && !empty($oct_ultrastore_contact_address[$lang_id])) {
+                    $data['oct_ultrastore_contact_address'] = html_entity_decode($oct_ultrastore_contact_address[$lang_id], ENT_QUOTES, 'UTF-8');
+                } else {
+                    $data['oct_ultrastore_contact_address'] = false;
+                }
+
+                if (isset($oct_ultrastore_data['contact_telephone']) && !empty($oct_ultrastore_data['contact_telephone'])) {
+                    $data['oct_ultrastore_contact_telephone'] = array_values(array_filter(explode(PHP_EOL, $oct_ultrastore_data['contact_telephone'])));
+                } else {
+                    $data['oct_ultrastore_contact_telephone'] = false;
+                }
+
+                $oct_ultrastore_contact_open = $oct_ultrastore_data['contact_open'];
+
+                if (isset($oct_ultrastore_contact_open[$lang_id]) && !empty($oct_ultrastore_contact_open[$lang_id])) {
+                    $data['oct_ultrastore_contact_open'] = array_values(array_filter(explode(PHP_EOL, $oct_ultrastore_contact_open[$lang_id])));
+                } else {
+                    $data['oct_ultrastore_contact_open'] = false;
+                }
+
+                $oct_ultrastore_socials = $oct_ultrastore_data['socials'];
+
+                if (isset($oct_ultrastore_socials) && !empty($oct_ultrastore_socials)) {
+                    $data['oct_ultrastore_socials'] = $oct_ultrastore_socials;
+                } else {
+                    $data['oct_ultrastore_socials'] = false;
+                }
+                // oct_cool_email_template end
+
                 $html_data['date_added'] = date('m/d/Y h:i:s a', time());
                 $html_data['logo']       = $this->config->get('config_url') . 'image/' . $this->config->get('config_logo');
                 $html_data['store_name'] = $this->config->get('config_name');
@@ -188,7 +232,9 @@ class ControllerOctemplatesModuleOctProductPreorder extends Controller {
                 $html_data['text_date_added'] = $this->language->get('text_date_added');
                 $html_data['data_info']       = $data;
 
-                $html = $this->load->view('mail/oct_product_preorder_mail', $html_data);
+                $html_data['text_footer'] = $this->language->get('text_footer');
+
+                $html = $this->load->view('octemplates/mail/oct_product_preorder_mail', $html_data);
 
                 $mail                = new Mail();
                 $mail->protocol      = $this->config->get('config_mail_protocol');

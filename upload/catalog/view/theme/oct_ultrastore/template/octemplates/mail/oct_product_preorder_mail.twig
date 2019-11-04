@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/strict.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>{{ title }}</title>
+</head>
+<body style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #000000;">
+<div style="width: 680px;"><a href="{{ store_url }}" title="{{ store_name }}"><img src="{{ logo }}" alt="{{ store_name }}" style="margin-bottom: 20px; border: none; max-width: 250px; display: block; margin: 20px auto;"/></a>
+    <div>
+        <time style="font-size: 11px;  color: rgba(208, 208, 208, 0.96);">{{ date_added }}</time>
+        <div style="float: right; font-size: 24px;"><span class="xhr">{{ text_info }}</span></div>
+    </div>
+    <table style="border-collapse: collapse; width: 100%; border-top: 1px solid #E7E7E7; border-left: 1px solid #E7E7E7; margin-bottom: 20px;">
+        <tbody>
+        {% for info in data_info %}
+        <tr>
+            <td style="font-size: 12px; border-right: 1px solid #E7E7E7; border-bottom: 1px solid #E7E7E7; text-align: left; padding: 7px;">{{ info.name }}</td>
+            <td style="font-size: 12px; border-right: 1px solid #E7E7E7; border-bottom: 1px solid #E7E7E7; text-align: left; padding: 7px;">{{ info.value }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+        </tfoot>
+    </table>
+    <p style="margin-top: 20px; margin-bottom: 20px; text-align: center;">{{ text_footer }}</p>
+    <div style="color: #757575; font-size: 12px; text-align: center; margin: 30px 0;">
+        {% if oct_ultrastore_contact_address %}
+            {{ oct_ultrastore_contact_address }}
+        {% endif %}
+        <div style="padding: 15px 0;">
+            {% if oct_ultrastore_contact_telephone %}
+                {% for phone in oct_ultrastore_contact_telephone %}
+                    <a style="font-size: 16px; line-height: 24px; font-weight: bold; color: #333333;" href="tel:{{ phone }}">{{ phone }}</a><br />
+                {% endfor %}
+            {% endif %}
+        </div>
+        {% if oct_ultrastore_contact_open %}
+            {% for contact_open in oct_ultrastore_contact_open %}
+                {{ contact_open }}
+            {% endfor %}
+        {% endif %}
+        <div style="padding: 15px 0;">
+            {% if oct_ultrastore_socials %}
+                {% for social in oct_ultrastore_socials %}
+                    <a style="font-size: 18px; line-height: 27px; font-weight: bold; color: #000000;" href="{{ social.link }}">{{ social.title }}</a><br />
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+</body>
+</html>
