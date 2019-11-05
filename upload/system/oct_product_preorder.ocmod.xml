@@ -119,13 +119,6 @@
 	</file>
 	<file path="catalog/controller/product/product.php">
 		<operation>
-			<search><![CDATA[$this->document->addScript('catalog/view/javascript/jquery/datetimepicker/bootstrap-datetimepicker.min.js');]]></search>
-			<add position="after"><![CDATA[
-				$this->document->addScript('catalog/view/javascript/oct_product_preorder/input-mask.js');
-				$this->document->addScript('catalog/view/javascript/oct_product_preorder/oct_product_preorder.js');
-			]]></add>
-		</operation>
-		<operation>
 			<search><![CDATA[if ($product_info['quantity'] <= 0) {]]></search>
 			<add position="replace" offset="6"><![CDATA[
 				$data['disable_buy'] = 0;
@@ -269,32 +262,32 @@
 			]]></add>
 		</operation>
 	</file>
-	<file path="catalog/controller/octemplates/module/oct_popup_view.php">
-		<operation>
-			<search><![CDATA[$discounts = $this->model_catalog_product->getProductDiscounts($product_id);]]></search>
-			<add position="before"><![CDATA[
-				$oct_product_preorder_text = $this->config->get('oct_product_preorder_text');
-				$oct_product_preorder_data = $this->config->get('oct_product_preorder_data');
-				$oct_product_preorder_language = $this->load->language('octemplates/module/oct_product_preorder');
+<!--	<file path="catalog/controller/octemplates/module/oct_popup_view.php">-->
+<!--		<operation>-->
+<!--			<search><![CDATA[$discounts = $this->model_catalog_product->getProductDiscounts($product_id);]]></search>-->
+<!--			<add position="before"><![CDATA[-->
+<!--				$oct_product_preorder_text = $this->config->get('oct_product_preorder_text');-->
+<!--				$oct_product_preorder_data = $this->config->get('oct_product_preorder_data');-->
+<!--				$oct_product_preorder_language = $this->load->language('octemplates/module/oct_product_preorder');-->
 
-				if (isset($oct_product_preorder_data['status']) && $oct_product_preorder_data['status'] && isset($oct_product_preorder_data['stock_statuses']) && isset($product_info['oct_stock_status_id']) && in_array($product_info['oct_stock_status_id'], $oct_product_preorder_data['stock_statuses'])) {
-					$product_preorder_text = $oct_product_preorder_text[$this->session->data['language']]['call_button'];
-					$product_preorder_status = 1;
-				} else {
-					$product_preorder_text = $oct_product_preorder_language['text_out_of_stock'];
-					$product_preorder_status = 2;
-				}
-			]]></add>
-		</operation>
-		<operation>
-			<search><![CDATA[$discounts = $this->model_catalog_product->getProductDiscounts($product_id);]]></search>
-			<add position="before"><![CDATA[
-				$data['quantity']                => $product_info['quantity'],
-				$data['product_preorder_text']   => $product_preorder_text,
-				$data['product_preorder_status'] => $product_preorder_status,
-			]]></add>
-		</operation>
-	</file>
+<!--				if (isset($oct_product_preorder_data['status']) && $oct_product_preorder_data['status'] && isset($oct_product_preorder_data['stock_statuses']) && isset($product_info['oct_stock_status_id']) && in_array($product_info['oct_stock_status_id'], $oct_product_preorder_data['stock_statuses'])) {-->
+<!--					$product_preorder_text = $oct_product_preorder_text[$this->session->data['language']]['call_button'];-->
+<!--					$product_preorder_status = 1;-->
+<!--				} else {-->
+<!--					$product_preorder_text = $oct_product_preorder_language['text_out_of_stock'];-->
+<!--					$product_preorder_status = 2;-->
+<!--				}-->
+<!--			]]></add>-->
+<!--		</operation>-->
+<!--		<operation>-->
+<!--			<search><![CDATA[$discounts = $this->model_catalog_product->getProductDiscounts($product_id);]]></search>-->
+<!--			<add position="before"><![CDATA[-->
+<!--				$data['quantity']                => $product_info['quantity'],-->
+<!--				$data['product_preorder_text']   => $product_preorder_text,-->
+<!--				$data['product_preorder_status'] => $product_preorder_status,-->
+<!--			]]></add>-->
+<!--		</operation>-->
+<!--	</file>-->
 	<file path="catalog/controller/account/wishlist.php">
 		<operation>
 			<search><![CDATA[$data['products'][] = array(]]></search>
@@ -352,7 +345,7 @@
 		<operation>
 			<search><![CDATA[<div class="us-product-action-left">]]></search>
 			<add position="before"><![CDATA[
-				{% if (disable_buy == 0 or disable_buy == 1) %}
+				{% if (disable_buy == 0 or disable_buy == 1 or disable_buy == 2) %}
 			]]></add>
 		</operation>
 		<operation>
@@ -361,7 +354,7 @@
 				{% endif %}
 			]]></add>
 		</operation>
-		<operation error="skip">
+		<operation>
 			<search><![CDATA[<button type="button" id="button-cart" data-loading-text="{{ text_loading }}" class="us-product-btn us-product-btn-active">{{ button_cart }}</button>]]></search>
 			<add position="replace"><![CDATA[
 				{% if disable_buy == 0 %}
@@ -372,6 +365,28 @@
 				<button type="button" id="button-cart" data-loading-text="{{ text_loading }}" onclick="javascript:void(0)" class="us-product-btn us-product-btn-in-active">{{ stock_button }}</button>
 				{% endif %}
 			]]></add>
+		</operation>
+		<operation>
+			<search><![CDATA[{{ footer }}]]></search>
+			<add position="before">
+				$(function() {
+					function get_oct_product_preorder(product_id) {
+						masked('body', true);
+						$(".modal-backdrop").remove();
+						$.ajax({
+							type: 'post',
+							dataType: 'html',
+							url: 'index.php?route=octemplates/module/oct_product_preorder',
+							data: 'product_id=' + product_id,
+							success: function(data) {
+								masked('body', false);
+								$(".modal-holder").html(data);
+								$("#us-oct-product-preorder-modal").modal("show");
+							}
+						});
+					}
+				});
+			</add>
 		</operation>
 	</file>
 </modification>
