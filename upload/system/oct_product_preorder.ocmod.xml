@@ -1,18 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-	<modification>
-	<name>Ultrastore - Preorder and Stock status</name>
+<modification>
+	<name>Octemplates - Preorder and Stock status</name>
 	<code>oct_preorder_and_stock_status</code>
 	<version>1.0.0</version>
 	<author>eapdob</author>
 	<link>eapdob@gmail.com</link>
-	<file path="catalog/controller/common/header.php">
-		<operation>
-		  <search><![CDATA[public function index() {]]></search>
-		  <add position="after"><![CDATA[
-				$data['oct_product_preorder_data'] = $this->config->get('oct_product_preorder_data');
-		  ]]></add>
-		</operation>
-  	</file>
 	<file path="catalog/language/en-gb/product/product.php">
 		<operation>
 			<search><![CDATA[<?php]]></search>
@@ -21,7 +13,7 @@
 				$_['text_outstock']     = '<font style="color: #f56b6b;">Out of stock</font>';
 				$_['text_minstock']     = '<font style="color: #f56b6b;">The item ends</font>';
 			]]></add>
-		</operation> 
+		</operation>
 	</file>
 	<file path="catalog/language/ru-ru/product/product.php">
 		<operation>
@@ -29,9 +21,9 @@
 			<add position="after"><![CDATA[
 				$_['text_instock']      = 'В наличии';
 				$_['text_outstock']     = '<font style="color: #f56b6b;">Нет в наличии</font>';
-				$_['text_minstock']     = '<font style="color: #f56b6b;">Заканчивается</font>';				
+				$_['text_minstock']     = '<font style="color: #f56b6b;">Заканчивается</font>';
 			]]></add>
-		</operation> 
+		</operation>
 	</file>
 	<file path="catalog/language/ua-uk/product/product.php">
 		<operation>
@@ -39,7 +31,7 @@
 			<add position="after"><![CDATA[
 				$_['text_instock']      = 'В наявності';
 				$_['text_outstock']     = '<font style="color: #f56b6b;">Немає в наявності</font>';
-				$_['text_minstock']     = '<font style="color: #f56b6b;">Закінчується</font>';				
+				$_['text_minstock']     = '<font style="color: #f56b6b;">Закінчується</font>';
 			]]></add>
 		</operation>
 	</file>
@@ -50,9 +42,9 @@
 				$_['text_stock']        = 'Stock:';
 				$_['text_instock']      = 'In stock';
 				$_['text_outstock']     = 'Out of stock';
-				$_['text_minstock']     = 'The item ends';				
+				$_['text_minstock']     = 'The item ends';
 			]]></add>
-		</operation> 
+		</operation>
 	</file>
 	<file path="catalog/language/ru-ru/product/{category,search,special,manufacturer}.php">
 		<operation>
@@ -61,9 +53,9 @@
 				$_['text_stock']        = 'Наличие:';
 				$_['text_instock']      = 'На складе';
 				$_['text_outstock']     = 'Нет в наличии';
-				$_['text_minstock']     = 'Заканчивается';				
+				$_['text_minstock']     = 'Заканчивается';
 			]]></add>
-		</operation> 
+		</operation>
 	</file>
 	<file path="catalog/language/ua-uk/product/{category,search,special,manufacturer}.php">
 		<operation>
@@ -72,7 +64,7 @@
 				$_['text_stock']        = 'Наявність:';
 				$_['text_instock']      = 'В наявності';
 				$_['text_outstock']     = 'Немає в наявності';
-				$_['text_minstock']     = 'Закінчується';				
+				$_['text_minstock']     = 'Закінчується';
 			]]></add>
 		</operation>
 	</file>
@@ -80,10 +72,10 @@
 		<operation>
 			<search><![CDATA[<?php]]></search>
 			<add position="after"><![CDATA[
-				$_['text_stock']        = 'Stock:';
-				$_['text_instock']      = 'In stock';
-				$_['text_outstock']     = 'Out of stock';
-				$_['text_minstock']     = 'The item ends';
+				$_['text_stock']        = 'Наявність:';
+				$_['text_instock']      = 'В наявності';
+				$_['text_outstock']     = 'Немає в наявності';
+				$_['text_minstock']     = 'Закінчується';
 			]]></add>
 		</operation>
 	</file>
@@ -91,10 +83,10 @@
 		<operation>
 			<search><![CDATA[<?php]]></search>
 			<add position="after"><![CDATA[
-				$_['text_stock']        = 'Наличие:';
-				$_['text_instock']      = 'На складе';
-				$_['text_outstock']     = 'Нет в наличии';
-				$_['text_minstock']     = 'Заканчивается';
+				$_['text_stock']        = 'Наявність:';
+				$_['text_instock']      = 'В наявності';
+				$_['text_outstock']     = 'Немає в наявності';
+				$_['text_minstock']     = 'Закінчується';
 			]]></add>
 		</operation>
 	</file>
@@ -122,7 +114,7 @@
 			<search><![CDATA[if ($product_info['quantity'] <= 0) {]]></search>
 			<add position="replace" offset="6"><![CDATA[
 				$data['disable_buy'] = 0;
-				
+
 				$oct_product_preorder_text = $this->config->get('oct_product_preorder_text');
 				$oct_product_preorder_data = $this->config->get('oct_product_preorder_data');
 				$oct_product_stock_checkout = $this->config->get('config_stock_checkout');
@@ -177,12 +169,12 @@
 		<operation>
 			<search><![CDATA[$data['products'][] = array(]]></search>
 			<add position="after"><![CDATA[
-				'quantity' => $result['quantity'],
+				'quantity' => (int) $result['quantity'],
 				'product_preorder_text' => $product_preorder_text,
 				'product_preorder_status' => $product_preorder_status,
 			]]></add>
 		</operation>
-	</file>	
+	</file>
 	<file path="catalog/controller/product/{category,search,special,manufacturer}.php">
 		<operation>
 			<search><![CDATA[$data['products'][] = array(]]></search>
@@ -204,12 +196,12 @@
 		<operation>
 			<search><![CDATA['price'       => $price,]]></search>
 			<add position="before"><![CDATA[
-				'quantity'       => $result['quantity'], 
+				'quantity'       => (int) $result['quantity'],
 				'product_preorder_text' => $product_preorder_text,
 				'product_preorder_status' => $product_preorder_status,
 			]]></add>
 		</operation>
-	</file>	
+	</file>
 	<file path="catalog/controller/extension/module/{bestseller,latest,special}.php">
 		<operation>
 			<search><![CDATA[$data['products'][] = array(]]></search>
@@ -230,12 +222,12 @@
 		<operation>
 			<search><![CDATA['price'       => $price,]]></search>
 			<add position="before"><![CDATA[
-				'quantity'       => $result['quantity'], 
+				'quantity'       => (int) $result['quantity'],
 				'product_preorder_text' => $product_preorder_text,
 				'product_preorder_status' => $product_preorder_status,
 			]]></add>
 		</operation>
-	</file>	
+	</file>
 	<file path="catalog/controller/extension/module/featured.php">
 		<operation>
 			<search><![CDATA[$data['products'][] = array(]]></search>
@@ -256,38 +248,106 @@
 		<operation>
 			<search><![CDATA['price'       => $price,]]></search>
 			<add position="before"><![CDATA[
-				'quantity'       => $product_info['quantity'], 
+				'quantity'       => (int) $product_info['quantity'],
 				'product_preorder_text' => $product_preorder_text,
 				'product_preorder_status' => $product_preorder_status,
 			]]></add>
 		</operation>
 	</file>
-<!--	<file path="catalog/controller/octemplates/module/oct_popup_view.php">-->
-<!--		<operation>-->
-<!--			<search><![CDATA[$discounts = $this->model_catalog_product->getProductDiscounts($product_id);]]></search>-->
-<!--			<add position="before"><![CDATA[-->
-<!--				$oct_product_preorder_text = $this->config->get('oct_product_preorder_text');-->
-<!--				$oct_product_preorder_data = $this->config->get('oct_product_preorder_data');-->
-<!--				$oct_product_preorder_language = $this->load->language('octemplates/module/oct_product_preorder');-->
+	<file path="catalog/controller/extension/module/oct_products_from_category.php">
+		<operation>
+			<search><![CDATA[$data['products'][] = []]></search>
+			<add position="before"><![CDATA[
+				$oct_product_preorder_text = $this->config->get('oct_product_preorder_text');
+				$oct_product_preorder_data = $this->config->get('oct_product_preorder_data');
+				$oct_product_preorder_language = $this->load->language('octemplates/module/oct_product_preorder');
 
-<!--				if (isset($oct_product_preorder_data['status']) && $oct_product_preorder_data['status'] && isset($oct_product_preorder_data['stock_statuses']) && isset($product_info['oct_stock_status_id']) && in_array($product_info['oct_stock_status_id'], $oct_product_preorder_data['stock_statuses'])) {-->
-<!--					$product_preorder_text = $oct_product_preorder_text[$this->session->data['language']]['call_button'];-->
-<!--					$product_preorder_status = 1;-->
-<!--				} else {-->
-<!--					$product_preorder_text = $oct_product_preorder_language['text_out_of_stock'];-->
-<!--					$product_preorder_status = 2;-->
-<!--				}-->
-<!--			]]></add>-->
-<!--		</operation>-->
-<!--		<operation>-->
-<!--			<search><![CDATA[$discounts = $this->model_catalog_product->getProductDiscounts($product_id);]]></search>-->
-<!--			<add position="before"><![CDATA[-->
-<!--				$data['quantity']                => $product_info['quantity'],-->
-<!--				$data['product_preorder_text']   => $product_preorder_text,-->
-<!--				$data['product_preorder_status'] => $product_preorder_status,-->
-<!--			]]></add>-->
-<!--		</operation>-->
-<!--	</file>-->
+				if (isset($oct_product_preorder_data['status']) && $oct_product_preorder_data['status'] && isset($oct_product_preorder_data['stock_statuses']) && isset($product_info['oct_stock_status_id']) && in_array($product_info['oct_stock_status_id'], $oct_product_preorder_data['stock_statuses'])) {
+					$product_preorder_text = $oct_product_preorder_text[$this->session->data['language']]['call_button'];
+					$product_preorder_status = 1;
+				} else {
+					$product_preorder_text = $oct_product_preorder_language['text_out_of_stock'];
+					$product_preorder_status = 2;
+				}
+			]]></add>
+		</operation>
+		<operation>
+			<search><![CDATA['price'       => $price,]]></search>
+			<add position="before"><![CDATA[
+				'quantity'       => (int) $product_info['quantity'],
+				'product_preorder_text' => $product_preorder_text,
+				'product_preorder_status' => $product_preorder_status,
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/octemplates/blog/oct_blogarticle.php">
+		<operation error="skip">
+			<search><![CDATA[$data['products'][] = []]></search>
+			<add position="before"><![CDATA[
+				$oct_product_preorder_text = $this->config->get('oct_product_preorder_text');
+				$oct_product_preorder_data = $this->config->get('oct_product_preorder_data');
+				$oct_product_preorder_language = $this->load->language('octemplates/module/oct_product_preorder');
+
+				if (isset($oct_product_preorder_data['status']) && $oct_product_preorder_data['status'] && isset($oct_product_preorder_data['stock_statuses']) && isset($product_info['oct_stock_status_id']) && in_array($product_info['oct_stock_status_id'], $oct_product_preorder_data['stock_statuses'])) {
+					$product_preorder_text = $oct_product_preorder_text[$this->session->data['language']]['call_button'];
+					$product_preorder_status = 1;
+				} else {
+					$product_preorder_text = $oct_product_preorder_language['text_out_of_stock'];
+					$product_preorder_status = 2;
+				}
+			]]></add>
+		</operation>
+		<operation>
+			<search><![CDATA['price'       => $price,]]></search>
+			<add position="before"><![CDATA[
+				'quantity'       => (int) $result['quantity'],
+				'product_preorder_text' => $product_preorder_text,
+				'product_preorder_status' => $product_preorder_status,
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/octemplates/module/oct_popup_view.php">
+		<operation error="skip">
+			<search><![CDATA[if ($product_info['quantity'] <= 0) {]]></search>
+			<add position="before"><![CDATA[
+				$data['disable_buy'] = 0;
+
+				$oct_product_preorder_text = $this->config->get('oct_product_preorder_text');
+				$oct_product_preorder_data = $this->config->get('oct_product_preorder_data');
+				$oct_product_stock_checkout = $this->config->get('config_stock_checkout');
+
+				if (isset($oct_product_preorder_data['status']) && $oct_product_preorder_data['status'] && isset($oct_product_preorder_data['stock_statuses']) && isset($product_info['oct_stock_status_id']) && in_array($product_info['oct_stock_status_id'], $oct_product_preorder_data['stock_statuses'])) {
+					if ($product_info['quantity'] <= 0) {
+						$data['stock'] = $product_info['stock_status'];
+						$data['stockbutton'] = $oct_product_preorder_text[$this->session->data['language']]['call_button'];
+						if ($oct_product_stock_checkout == 0) {
+							$data['disable_buy'] = 1;
+						}
+					} elseif ($this->config->get('config_stock_display')) {
+						$data['stock'] = $product_info['quantity'];
+					} elseif ($product_info['quantity'] >= 1 && $product_info['quantity'] <= 3) {
+						$data['stock'] = $this->language->get('text_minstock');
+					} else {
+						$data['stock'] = $this->language->get('text_instock');
+					}
+				} else {
+					if ($product_info['quantity'] <= 0) {
+						$data['stock'] = $product_info['stock_status'];
+						$data['stockbutton'] = $product_info['stock_status'];
+						if ($oct_product_stock_checkout == 0) {
+							$data['disable_buy'] = 2;
+						}
+					} elseif ($this->config->get('config_stock_display')) {
+						$data['stock'] = $product_info['quantity'];
+						$data['stockbutton'] = $product_info['quantity'];
+					} else {
+						$data['stock'] = $this->language->get('text_instock');
+						$data['stockbutton'] = $this->language->get('text_instock');
+					}
+				}
+			]]></add>
+		</operation>
+	</file>
 	<file path="catalog/controller/account/wishlist.php">
 		<operation>
 			<search><![CDATA[$data['products'][] = array(]]></search>
@@ -308,12 +368,12 @@
 		<operation>
 			<search><![CDATA[$data['products'][] = array(]]></search>
 			<add position="after"><![CDATA[
-				'quantity'       => $product_info['quantity'], 
+				'quantity'       => (int) $product_info['quantity'],
 				'product_preorder_text' => $product_preorder_text,
 				'product_preorder_status' => $product_preorder_status,
 			]]></add>
 		</operation>
-	</file>		
+	</file>
 	<file path="catalog/controller/product/compare.php">
 		<operation>
 			<search><![CDATA[$data['products'][$product_id] = array(]]></search>
@@ -334,18 +394,17 @@
 		<operation>
 			<search><![CDATA[$data['products'][$product_id] = array(]]></search>
 			<add position="after"><![CDATA[
-				'quantity'       => $product_info['quantity'], 
+				'quantity'       => (int) $product_info['quantity'],
 				'product_preorder_text' => $product_preorder_text,
 				'product_preorder_status' => $product_preorder_status,
 			]]></add>
 		</operation>
 	</file>
-
 	<file path="catalog/view/theme/oct_ultrastore/template/product/product.twig">
 		<operation>
 			<search><![CDATA[<div class="us-product-action-left">]]></search>
 			<add position="before"><![CDATA[
-				{% if (disable_buy == 0 or disable_buy == 1 or disable_buy == 2) %}
+				{% if (disable_buy is defined and disable_buy is not empty) %}
 			]]></add>
 		</operation>
 		<operation>
@@ -366,27 +425,65 @@
 				{% endif %}
 			]]></add>
 		</operation>
+	</file>
+	<file path="catalog/view/theme/oct_ultrastore/template/product/{category,search,special,manufacturer}.twig">
 		<operation>
-			<search><![CDATA[{{ footer }}]]></search>
-			<add position="before">
-				$(function() {
-					function get_oct_product_preorder(product_id) {
-						masked('body', true);
-						$(".modal-backdrop").remove();
-						$.ajax({
-							type: 'post',
-							dataType: 'html',
-							url: 'index.php?route=octemplates/module/oct_product_preorder',
-							data: 'product_id=' + product_id,
-							success: function(data) {
-								masked('body', false);
-								$(".modal-holder").html(data);
-								$("#us-oct-product-preorder-modal").modal("show");
-							}
-						});
-					}
-				});
-			</add>
+			<search><![CDATA[<div class="us-module-item d-flex flex-column">]]></search>
+			<add position="replace"><![CDATA[
+                    <div class="us-module-item d-flex flex-column{% if product.product_preorder_status == 2 and product.quantity <= 0 %} us-no-stock{% endif %}">
+                ]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[<a href="javascript:void(0);" onclick="cart.add('{{ product.product_id }}');" class="us-module-cart-btn button-cart">{{ button_cart }}</a>]]></search>
+			<add position="replace"><![CDATA[<a href="{% if (product.product_preorder_status == 1 and product.quantity > 0) or (product.product_preorder_status == 1 and product.quantity <= 0) %}javascript:void(0);{% else %}{{ product.href }}{% endif %}"{% if product.quantity > 0 %} onclick="cart.add('{{ product.product_id }}');"{% elseif product.product_preorder_status == 1 and product.quantity <= 0 %} onclick="get_oct_product_preorder('{{ product.product_id }}');"{% else %}{% endif %} class="us-module-cart-btn button-cart">{{ ((product.product_preorder_status == 1 or product.product_preorder_status == 2) and product.quantity <= 0) ? product.product_preorder_text : button_cart }}</a>]]></add>
+		</operation>
+	</file>
+	<file path="catalog/view/theme/oct_ultrastore/template/extension/module/{bestseller,latest,special}.twig">
+		<operation>
+			<search><![CDATA[<div class="us-module-item us-module-column-item us-item">]]></search>
+			<add position="replace"><![CDATA[
+                    <div class="us-module-item us-module-column-item us-item{% if product.product_preorder_status == 2 and product.quantity <= 0 %} us-no-stock{% endif %}">
+                ]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[<a href="javascript:void(0);" onclick="cart.add('{{ product.product_id }}');" class="us-module-cart-btn button-cart">{{ button_cart }}</a>]]></search>
+			<add position="replace"><![CDATA[<a href="{% if (product.product_preorder_status == 1 or product.product_preorder_status == 2) and product.quantity > 0 %}javascript:void(0);{% else %}{{ product.href }}{% endif %}"{% if product.quantity > 0 %} onclick="cart.add('{{ product.product_id }}');"{% elseif (product.product_preorder_status == 1 or product.product_preorder_status == 2) and product.quantity <= 0 %} onclick="get_oct_product_preorder('{{ product.product_id }}');"{% else %}{% endif %} class="us-module-cart-btn button-cart">{{ ((product.product_preorder_status == 1 or product.product_preorder_status == 2) and quantity <= 0) ? product.product_preorder_text : button_cart }}</a>]]></add>
+		</operation>
+	</file>
+	<file path="catalog/view/theme/oct_ultrastore/template/extension/module/featured.twig">
+		<operation>
+			<search><![CDATA[<div class="us-module-item us-module-column-item us-item">]]></search>
+			<add position="replace"><![CDATA[
+                    <div class="us-module-item us-module-column-item us-item{% if product.product_preorder_status == 2 and product.quantity <= 0 %} us-no-stock{% endif %}">
+                ]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[<a href="javascript:void(0);" onclick="cart.add('{{ product.product_id }}');" class="us-module-cart-btn button-cart">{{ button_cart }}</a>]]></search>
+			<add position="replace"><![CDATA[<a href="{% if (product.product_preorder_status == 1 or product.product_preorder_status == 2) and product.quantity > 0 %}javascript:void(0);{% else %}{{ product.href }}{% endif %}"{% if product.quantity > 0 %} onclick="cart.add('{{ product.product_id }}');"{% elseif (product.product_preorder_status == 1 or product.product_preorder_status == 2) and product.quantity <= 0 %} onclick="get_oct_product_preorder('{{ product.product_id }}');"{% else %}{% endif %} class="us-module-cart-btn button-cart">{{ ((product.product_preorder_status == 1 or product.product_preorder_status == 2) and quantity <= 0) ? product.product_preorder_text : button_cart }}</a>]]></add>
+		</operation>
+	</file>
+	<file path="catalog/view/theme/oct_ultrastore/template/octemplates/module/oct_products_from_category.twig">
+		<operation>
+			<search><![CDATA[<div class="us-module-item us-module-column-item us-item">]]></search>
+			<add position="replace"><![CDATA[
+                    <div class="us-module-item us-module-column-item us-item{% if product.product_preorder_status == 2 and product.quantity <= 0 %} us-no-stock{% endif %}">
+                ]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[<a href="javascript:void(0);" onclick="cart.add('{{ product.product_id }}');" class="us-module-cart-btn button-cart">{{ button_cart }}</a>]]></search>
+			<add position="replace"><![CDATA[<a href="{% if (product.product_preorder_status == 1 or product.product_preorder_status == 2) and product.quantity > 0 %}javascript:void(0);{% else %}{{ product.href }}{% endif %}"{% if product.quantity > 0 %} onclick="cart.add('{{ product.product_id }}');"{% elseif (product.product_preorder_status == 1 or product.product_preorder_status == 2) and product.quantity <= 0 %} onclick="get_oct_product_preorder('{{ product.product_id }}');"{% else %}{% endif %} class="us-module-cart-btn button-cart">{{ ((product.product_preorder_status == 1 or product.product_preorder_status == 2) and quantity <= 0) ? product.product_preorder_text : button_cart }}</a>]]></add>
+		</operation>
+	</file>
+	<file path="catalog/view/theme/oct_ultrastore/template/octemplates/blog/oct_blogarticle.twig">
+		<operation>
+			<search><![CDATA[<div class="us-module-item d-flex flex-column">]]></search>
+			<add position="replace"><![CDATA[
+                    <div class="us-module-item d-flex flex-column{% if product.product_preorder_status == 2 and product.quantity <= 0 %} us-no-stock{% endif %}">
+                ]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[<a href="javascript:void(0);" onclick="cart.add('{{ product.product_id }}');" class="us-module-cart-btn button-cart">{{ button_cart }}</a>]]></search>
+			<add position="replace"><![CDATA[<a href="{% if (product.product_preorder_status == 1 or product.product_preorder_status == 2) and product.quantity > 0 %}javascript:void(0);{% else %}{{ product.href }}{% endif %}"{% if product.quantity > 0 %} onclick="cart.add('{{ product.product_id }}');"{% elseif (product.product_preorder_status == 1 or product.product_preorder_status == 2) and product.quantity <= 0 %} onclick="get_oct_product_preorder('{{ product.product_id }}');"{% else %}{% endif %} class="us-module-cart-btn button-cart">{{ ((product.product_preorder_status == 1 or product.product_preorder_status == 2) and quantity <= 0) ? product.product_preorder_text : button_cart }}</a>]]></add>
 		</operation>
 	</file>
 </modification>
