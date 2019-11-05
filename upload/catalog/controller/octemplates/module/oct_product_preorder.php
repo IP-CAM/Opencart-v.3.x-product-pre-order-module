@@ -174,9 +174,9 @@ class ControllerOctemplatesModuleOctProductPreorder extends Controller {
                 'info' => serialize($data)
             );
 
-            $this->model_extension_module_oct_product_preorder->addRequest($data_send, $linkgood);
+            $this->model_octemplates_module_oct_product_preorder->addRequest($data_send, $linkgood);
 
-            $json['output'] = $this->language->get('text_success_send');
+            $json['success'] = $this->language->get('text_success_send');
 
             if ($oct_product_preorder_data['notify_status']) {
 

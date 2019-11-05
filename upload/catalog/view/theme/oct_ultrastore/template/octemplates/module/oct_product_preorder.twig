@@ -79,8 +79,8 @@
                             {% endif %}
                             {% if text_terms %}
                                 <div class="us-form-checkbox-group us-form-checkbox-group-20">
-                                    <label for="scales-2" class="d-flex"><span>{{ text_terms }}</span></label>
                                     <input type="checkbox" id="scales-2" class="us-form-checkbox-input" name="terms">
+                                    <label for="scales-2" class="d-flex"><span>{{ text_terms }}</span></label>
                                 </div>
                             {% endif %}
                         </div>
@@ -96,48 +96,49 @@
     </div>
 </div>
 {% if  mask is defined and mask is not empty %}
-{#<script src="catalog/view/javascript/oct_product_preorder/input-mask.js"></script>
-<script>
-$('#us-popup-product-preorder-modal input[name="user-telephone"]').inputmask({'mask': {{ mask }}});#}
-<script>
-    usInputMask('#us-popup-product-preorder input[name="user-telephone"]', {{ mask }});
-</script>
+    {#<script src="catalog/view/javascript/oct_product_preorder/input-mask.js"></script>
+    <script>
+    $('#us-popup-product-preorder-modal input[name="user-telephone"]').inputmask({'mask': {{ mask }}});#}
+    <script src="catalog/view/theme/oct_ultrastore/js/jquery.inputmask.bundle.min.js"></script>
+    <script>
+        usInputMask('#us-popup-product-preorder input[name="user-telephone"]', '{{ mask }}');
+    </script>
 {% endif %}
 <script>
-$("#user-name, #user-telephone, #user-email, #user-comment, #scales-2").on("change paste keyup", function() {
-    $(this).removeClass('error_style');
-});
-{% if error_stock_check is not defined %}
-$('#us-oct-product-preorder-send-button').on('click', function() {
-    masked('body', false);
-    masked('body', true);
-    $.ajax({
-        type: 'post',
-        dataType: 'json',
-        url: 'index.php?route=octemplates/module/oct_product_preorder/send',
-        data: $('#us-oct-product-preorder-form').serialize(),
-        success: function(json) {
-            masked('body', false);
-            if (json['error']) {
-                $('#us-oct-product-preorder-modal .text-danger').remove();
-                let errorOption = '';
+    $("#user-name, #user-telephone, #user-email, #user-comment, #scales-2").on("change paste keyup", function() {
+        $(this).removeClass('error_style');
+    });
+    {% if error_stock_check is not defined %}
+    $('#us-oct-product-preorder-send-button').on('click', function() {
+        masked('body', false);
+        masked('body', true);
+        $.ajax({
+            type: 'post',
+            dataType: 'json',
+            url: 'index.php?route=octemplates/module/oct_product_preorder/send',
+            data: $('#us-oct-product-preorder-form').serialize(),
+            success: function(json) {
+                masked('body', false);
+                if (json['error']) {
+                    $('#us-oct-product-preorder-modal .text-danger').remove();
+                    let errorOption = '';
 
-                $.each(json['error']['field'], function(i, val) {
-                    if (val) {
-                        $('#us-oct-product-preorder-modal [name="' + i + '"]').addClass('error_style');
-                        errorOption += '<div class="alert-text-item">' + val + '</div>';
+                    $.each(json['error']['field'], function(i, val) {
+                        if (val) {
+                            $('#us-oct-product-preorder-modal [name="' + i + '"]').addClass('error_style');
+                            errorOption += '<div class="alert-text-item">' + val + '</div>';
+                        }
+                    });
+
+                    usNotify('danger', errorOption);
+                } else {
+                    if (json['success']) {
+                        $('.us-module-btn').attr("disabled", "disabled");
+                        $("#us-oct-product-preorder-main-block").html(json['success']).removeClass('us-modal-body-oct-product-preorder');
                     }
-                });
-
-                usNotify('danger', errorOption);
-            } else {
-                if (json['success']) {
-                    $('.us-module-btn').attr("disabled", "disabled");
-                    $("#us-oct-product-preorder-main-block").html(json['success']).removeClass('us-modal-body-oct-product-preorder');
                 }
             }
-        }
+        });
     });
-});
-{% endif %}
+    {% endif %}
 </script>

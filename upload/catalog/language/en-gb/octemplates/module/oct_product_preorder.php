@@ -10,7 +10,7 @@ $_['button_send'] = 'Submit';
 $_['text_success_send'] = '<p> Your request has been sent successfully! </p>';
 $_['text_loading'] = 'Loading ...';
 
-$_['text_info'] = 'User';
+$_['text_info'] = 'Application for pre-order';
 $_['text_date_added'] = 'Added';
 $_['text_out_of_stock'] = 'Out of date';
 

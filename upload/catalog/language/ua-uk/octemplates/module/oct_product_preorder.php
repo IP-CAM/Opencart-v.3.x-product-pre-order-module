@@ -3,22 +3,22 @@
 $_['heading_title']       = 'Передзамовлення';
 
 // Button
-$_['button_close']     		= 'Закрити';
-$_['button_send']     		= 'Відправити';
+$_['button_close']     	  = 'Закрити';
+$_['button_send']     	  = 'Відправити';
 
 // Text
 $_['text_success_send']   = '<p>Ваш запит успішно відправлений!</p>';
 $_['text_loading']        = 'Завантаження...';
 
-$_['text_info']						= 'Користувач';
-$_['text_date_added']			= 'Додано';
+$_['text_info']			  = 'Заявка на передзамовлення';
+$_['text_date_added']	  = 'Додано';
 $_['text_out_of_stock']   = 'Закінчився';
 
 // Enter
 $_['enter_name']     			= 'Iм\'я';
 $_['enter_telephone']     = 'Телефон';
 $_['enter_email']         = 'Email';
-$_['enter_comment']       = 'Rоментар';
+$_['enter_comment']       = 'Коментар';
 $_['enter_referer']       = 'Посилання на товар';
 
 // Error
