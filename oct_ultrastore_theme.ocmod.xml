@@ -1,0 +1,1929 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<code>oct_ultrastore_theme</code>
+	<name>Octemplates - UltraStore Theme</name>
+	<version>1.1.0</version>
+	<author>Octemplates</author>
+	<link>https://octemplates.net/</link>
+	<file path="admin/view/template/common/header.twig">
+		<operation error="skip">
+			<search><![CDATA[<link href="view/javascript/font-awesome/css/font-awesome.min.css" type="text/css" rel="stylesheet" />]]></search>
+			<add position="before"><![CDATA[
+			<link href="view/stylesheet/fontawesome-free-5.6.1-web/css/all.css" type="text/css" rel="stylesheet" />
+			]]></add>
+		</operation>
+	</file>
+	<file path="admin/controller/catalog/information.php">
+		<operation error="skip">
+			<search><![CDATA[protected function validateDelete() {]]></search>
+			<add position="before"><![CDATA[
+			public function octAutocomplete() {
+				$json = array();
+
+				if (isset($this->request->get['filter_name'])) {
+					$this->load->model('catalog/information');
+
+					$filter_data = array(
+						'filter_name' => $this->request->get['filter_name'],
+						'sort'        => 'id.title',
+						'order'       => 'ASC',
+						'start'       => 0,
+						'limit'       => 5
+					);
+
+					$results = $this->model_catalog_information->getInformations($filter_data);
+
+					foreach ($results as $result) {
+						$json[] = array(
+							'information_id' => $result['information_id'],
+							'name'       	 => strip_tags(html_entity_decode($result['title'], ENT_QUOTES, 'UTF-8')),
+							'href'		  	 => $this->model_catalog_information->getInformationSeoUrls((int)$result['information_id']),
+							'description' 	 => $this->model_catalog_information->getInformationDescriptions((int)$result['information_id']),
+						);
+					}
+				}
+
+				$sort_order = array();
+
+				foreach ($json as $key => $value) {
+					$sort_order[$key] = $value['name'];
+				}
+
+				array_multisort($sort_order, SORT_ASC, $json);
+
+				$this->response->addHeader('Content-Type: application/json');
+				$this->response->setOutput(json_encode($json));
+			}
+			]]></add>
+		</operation>
+	</file>
+	<file path="admin/model/catalog/product.php">
+		<operation error="skip">
+			<search><![CDATA[$this->db->query("INSERT INTO " . DB_PREFIX . "seo_url SET store_id = '" . (int)$store_id . "', language_id = '" . (int)$language_id . "', query = 'product_id=" . (int)$product_id . "', keyword = '" . $this->db->escape($keyword) . "'");]]></search>
+			<add position="after" offset="1"><![CDATA[
+			else {
+				if ($this->config->get('theme_oct_ultrastore_seo_url_status')) {
+					$this->load->model('octemplates/widgets/oct_seogeneration');
+					
+					$this->model_octemplates_widgets_oct_seogeneration->seoUrlGenerator('product', (int)$language_id, (int)$store_id, $data, (int)$product_id);
+				}
+			}
+			]]></add>
+		</operation>
+	</file>
+	<file path="admin/model/catalog/category.php">
+		<operation error="skip">
+			<search><![CDATA[$this->db->query("INSERT INTO " . DB_PREFIX . "seo_url SET store_id = '" . (int)$store_id . "', language_id = '" . (int)$language_id . "', query = 'category_id=" . (int)$category_id . "', keyword = '" . $this->db->escape($keyword) . "'");]]></search>
+			<add position="after" offset="1"><![CDATA[
+			else {
+				if ($this->config->get('theme_oct_ultrastore_seo_url_status')) {
+					$this->load->model('octemplates/widgets/oct_seogeneration');
+					
+					$this->model_octemplates_widgets_oct_seogeneration->seoUrlGenerator('category', (int)$language_id, (int)$store_id, $data, (int)$category_id);
+				}
+			}
+			]]></add>
+		</operation>
+	</file>
+	<file path="admin/model/catalog/manufacturer.php">
+		<operation error="skip">
+			<search><![CDATA[$this->db->query("INSERT INTO " . DB_PREFIX . "seo_url SET store_id = '" . (int)$store_id . "', language_id = '" . (int)$language_id . "', query = 'manufacturer_id=" . (int)$manufacturer_id . "', keyword = '" . $this->db->escape($keyword) . "'");]]></search>
+			<add position="after" offset="1"><![CDATA[
+			else {
+				if ($this->config->get('theme_oct_ultrastore_seo_url_status')) {
+					$this->load->model('octemplates/widgets/oct_seogeneration');
+					
+					$this->model_octemplates_widgets_oct_seogeneration->seoUrlGenerator('manufacturer', (int)$language_id, (int)$store_id, $data, (int)$manufacturer_id);
+				}
+			}
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$this->db->query("INSERT INTO `" . DB_PREFIX . "seo_url` SET store_id = '" . (int)$store_id . "', language_id = '" . (int)$language_id . "', query = 'manufacturer_id=" . (int)$manufacturer_id . "', keyword = '" . $this->db->escape($keyword) . "'");]]></search>
+			<add position="after" offset="1"><![CDATA[
+			else {
+				if ($this->config->get('theme_oct_ultrastore_seo_url_status')) {
+					$this->load->model('octemplates/widgets/oct_seogeneration');
+					
+					$this->model_octemplates_widgets_oct_seogeneration->seoUrlGenerator('manufacturer', (int)$language_id, (int)$store_id, $data, (int)$manufacturer_id);
+				}
+			}
+			]]></add>
+		</operation>
+	</file>
+	<file path="admin/model/catalog/information.php">
+		<operation error="skip">
+			<search><![CDATA[$sort_data = array(]]></search>
+			<add position="before"><![CDATA[
+			if (!empty($data['filter_name'])) {
+				$sql .= " AND id.title LIKE '%" . $this->db->escape($data['filter_name']) . "%'";
+			}
+
+			$sql .= " GROUP BY i.information_id";
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$this->db->query("INSERT INTO " . DB_PREFIX . "seo_url SET store_id = '" . (int)$store_id . "', language_id = '" . (int)$language_id . "', query = 'information_id=" . (int)$information_id . "', keyword = '" . $this->db->escape($keyword) . "'");]]></search>
+			<add position="after" offset="1"><![CDATA[
+			else {
+				if ($this->config->get('theme_oct_ultrastore_seo_url_status')) {
+					$this->load->model('octemplates/widgets/oct_seogeneration');
+					
+					$this->model_octemplates_widgets_oct_seogeneration->seoUrlGenerator('information', (int)$language_id, (int)$store_id, $data, (int)$information_id);
+				}
+			}
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$this->db->query("INSERT INTO `" . DB_PREFIX . "seo_url` SET store_id = '" . (int)$store_id . "', language_id = '" . (int)$language_id . "', query = 'information_id=" . (int)$information_id . "', keyword = '" . $this->db->escape($keyword) . "'");]]></search>
+			<add position="after" offset="1"><![CDATA[
+			else {
+				if ($this->config->get('theme_oct_ultrastore_seo_url_status')) {
+					$this->load->model('octemplates/widgets/oct_seogeneration');
+					
+					$this->model_octemplates_widgets_oct_seogeneration->seoUrlGenerator('information', (int)$language_id, (int)$store_id, $data, (int)$information_id);
+				}
+			}
+			]]></add>
+		</operation>
+	</file>
+	<file path="admin/model/octemplates/blog/oct_blogcategory.php">
+		<operation error="skip">
+			<search><![CDATA[$this->db->query("INSERT INTO " . DB_PREFIX . "seo_url SET store_id = '" . (int)$store_id . "', language_id = '" . (int)$language_id . "', query = 'blogcategory_id=" . (int)$blogcategory_id . "', keyword = '" . $this->db->escape($keyword) . "'");]]></search>
+			<add position="after" offset="1"><![CDATA[
+			else {
+				if ($this->config->get('theme_oct_ultrastore_seo_url_status')) {
+					$this->load->model('octemplates/widgets/oct_seogeneration');
+					
+					$this->model_octemplates_widgets_oct_seogeneration->seoUrlGenerator('blog_category', (int)$language_id, (int)$store_id, $data, (int)$blogcategory_id);
+				}
+			}
+			]]></add>
+		</operation>
+	</file>
+	<file path="admin/model/octemplates/blog/oct_blogarticle.php">
+		<operation error="skip">
+			<search><![CDATA[$this->db->query("INSERT INTO " . DB_PREFIX . "seo_url SET store_id = '" . (int)$store_id . "', language_id = '" . (int)$language_id . "', query = 'blogarticle_id=" . (int)$blogarticle_id . "', keyword = '" . $this->db->escape($keyword) . "'");]]></search>
+			<add position="after" offset="1"><![CDATA[
+			else {
+				if ($this->config->get('theme_oct_ultrastore_seo_url_status')) {
+					$this->load->model('octemplates/widgets/oct_seogeneration');
+					
+					$this->model_octemplates_widgets_oct_seogeneration->seoUrlGenerator('blog_article', (int)$language_id, (int)$store_id, $data, (int)$blogarticle_id);
+				}
+			}
+			]]></add>
+		</operation>
+	</file>
+	<file path="admin/controller/setting/setting.php">
+		<operation error="skip">
+			<search><![CDATA[if (isset($this->request->post['config_logo'])) {]]></search>
+			<add position="before"><![CDATA[
+			$this->load->language('octemplates/theme/oct_ultrastore');
+
+			$data['captcha_pages'][] = array(
+				'text'  => $this->language->get('entry_captcha_popup_purchase'),
+				'value' => 'oct_popup_purchase'
+			);
+
+			$data['captcha_pages'][] = array(
+				'text'  => $this->language->get('entry_captcha_sreview_reviews'),
+				'value' => 'oct_sreview_reviews'
+			);
+			]]></add>
+		</operation>
+	</file>
+	<file path="system/library/response.php">
+		<operation error="skip">
+			<search><![CDATA[public function output() {]]></search>
+			<add position="after"><![CDATA[
+			if (!defined('HTTP_CATALOG')) $this->output = str_replace('index.php?route=common/home', '', $this->output);
+
+			$oct_output = $this->output;
+
+			preg_match_all("/<style>(.*?)<\/style>/is", $oct_output, $oct_css_code);
+
+			if (isset($oct_css_code[1]) && !empty($oct_css_code[1])) {
+				$oct_output = preg_replace("/<style>.*?<\/style>/is", '', $oct_output);
+
+				$styles = "<style>";
+
+				foreach ($oct_css_code[1] as $code) {
+					$styles .= $code;
+				}
+
+				$styles .= "</style></head>";
+
+				$oct_output = preg_replace("/(<\/head>)/", $styles, $oct_output);
+			}
+
+			$this->output = $oct_output;
+			]]></add>
+		</operation>
+	</file>
+	<file path="system/library/document.php">
+		<operation>
+			<search><![CDATA[public function addStyle($href, $rel = 'stylesheet', $media = 'screen') {]]></search>
+			<add position="replace"><![CDATA[
+			public function addStyle($href, $rel = 'stylesheet', $media = 'screen', $temp = '') {
+				$href = $this->removeVersion($href);
+
+				if (!empty($temp)) {
+					$this->styles[$temp][$href] = array(
+						'href'  => $href,
+						'rel'   => $rel,
+						'media' => $media
+					);
+				} else {
+					$this->styles[$href] = array(
+						'href'  => $href,
+						'rel'   => $rel,
+						'media' => $media
+					);
+				}
+			}
+
+			private function removeVersion($link) {
+		        $href = explode('?', $link);
+
+		        return $href[0];
+		    }
+
+			public function addOldStyle($href, $rel = 'stylesheet', $media = 'screen') {
+			]]></add>
+		</operation>
+		<operation>
+			<search><![CDATA[public function getStyles() {]]></search>
+			<add position="replace"><![CDATA[
+			public function getStyles($temp = '') {
+				if (isset($this->styles[$temp])) {
+					if (isset($this->styles) && !empty($this->styles)) {
+						$styles = array_merge($this->styles[$temp], $this->styles);
+
+						unset($styles[$temp]);
+
+						return $styles;
+					} else {
+						return $this->styles[$temp];
+					}
+				} else {
+					return $this->styles;
+				}
+			}
+
+			public function getOldStyles() {
+			]]></add>
+		</operation>
+		<operation>
+			<search><![CDATA[public function addScript($href, $postion = 'header') {]]></search>
+			<add position="replace"><![CDATA[
+			public function addScript($href, $postion = 'header', $temp = '') {
+				$href = $this->removeVersion($href);
+			]]></add>
+		</operation>
+		<operation>
+			<search><![CDATA[$this->scripts[$postion][$href] = $href;]]></search>
+			<add position="replace"><![CDATA[
+			if (!empty($temp)) {
+				$this->scripts[$temp][$postion][$href] = $href;
+			} else {
+				$this->scripts[$postion][$href] = $href;
+			}
+			]]></add>
+		</operation>
+		<operation>
+			<search><![CDATA[public function getScripts($postion = 'header') {]]></search>
+			<add position="replace"><![CDATA[
+			public function getScripts($postion = 'header', $temp = '') {
+				if (isset($this->scripts[$temp][$postion])) {
+					if (isset($this->scripts[$postion]) && !empty($this->scripts[$postion])) {
+						return array_merge($this->scripts[$temp][$postion],$this->scripts[$postion]);
+					} else {
+						return $this->scripts[$temp][$postion];
+					}
+				} else {
+					if (isset($this->scripts[$postion])) {
+						return $this->scripts[$postion];
+					} else {
+						return array();
+					}
+				}
+			}
+
+			public function getOldScripts($postion = 'header') {
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/common/header.php">
+		<operation error="skip">
+			<search><![CDATA[public function index() {]]></search>
+			<add position="before"><![CDATA[
+			public function octBreadcrumbs($data) {
+				$data['oct_ultrastore_data'] = $this->config->get('theme_oct_ultrastore_data');
+
+				return $this->load->view('octemplates/module/oct_breadcrumbs', $data);
+			}
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[public function index() {]]></search>
+			<add position="after"><![CDATA[
+			$data['oct_ultrastore_data'] = $oct_ultrastore_data = $this->config->get('theme_oct_ultrastore_data');
+
+			$data['oct_lang_id'] = (int)$this->config->get('config_language_id');
+
+
+			if (isset($data['oct_ultrastore_data']['contact_open'][(int)$this->config->get('config_language_id')])){
+				$oct_contact_opens = explode(PHP_EOL, $data['oct_ultrastore_data']['contact_open'][(int)$this->config->get('config_language_id')]);
+
+				foreach ($oct_contact_opens as $oct_contact_open) {
+					if (!empty($oct_contact_open)) {
+						$data['oct_contact_opens'][] = $oct_contact_open;
+					}
+				}
+			}
+
+			$oct_contact_telephones = explode(PHP_EOL, $data['oct_ultrastore_data']['contact_telephone']);
+
+			foreach ($oct_contact_telephones as $oct_contact_telephone) {
+				if (!empty($oct_contact_telephone)) {
+					$data['oct_contact_telephones'][] = $oct_contact_telephone;
+				}
+			}
+
+			if (isset($oct_ultrastore_data['contact_map']) && !empty($oct_ultrastore_data['contact_map'])) {
+				$data['contact_map'] = html_entity_decode($oct_ultrastore_data['contact_map'], ENT_QUOTES, 'UTF-8');
+			}
+
+			if ((isset($this->request->get['route']) && $this->request->get['route'] == 'common/home') || $this->request->server['REQUEST_URI'] == '/') {
+				$data['oct_home'] = true;
+			}
+
+			$this->load->model('catalog/information');
+
+			$data['mobile_informations'] = [];
+
+			if (isset($oct_ultrastore_data['mobile_information_links']) && !empty($oct_ultrastore_data['mobile_information_links'])) {
+				foreach ($oct_ultrastore_data['mobile_information_links'] as $information_id) {
+					$information_info = $this->model_catalog_information->getInformation($information_id);
+
+					if ($information_info) {
+						$data['mobile_informations'][] = array(
+							'title' => $information_info['title'],
+							'href'  => $this->url->link('information/information', 'information_id=' . $information_id, true)
+						);
+					}
+				}
+			} else {
+				foreach ($this->model_catalog_information->getInformations() as $result) {
+					$data['mobile_informations'][] = array(
+						'title' => $result['title'],
+						'href'  => $this->url->link('information/information', 'information_id=' . $result['information_id'])
+					);
+				}
+			}
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$data['styles'] = $this->document->getStyles();]]></search>
+			<add position="replace"><![CDATA[
+			$data['styles'] = $this->document->getStyles('octemplates');
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$data['scripts'] = $this->document->getScripts('header');]]></search>
+			<add position="replace"><![CDATA[
+			$data['scripts'] = $this->document->getScripts('header', 'octemplates');
+
+			if (isset($oct_ultrastore_data['minify']) && $oct_ultrastore_data['minify'] == 'on') {
+				$dir_minify = $this->request->server['DOCUMENT_ROOT'] . '/min/';
+
+				require_once $dir_minify . '/lib/Minify/CSS/UriRewriter.php';
+
+				if ($this->request->server['HTTPS']) {
+					$link_server = $this->config->get('config_ssl');
+				} else {
+					$link_server = $this->config->get('config_url');
+				}
+
+				if (!is_dir($dir_minify . 'cache/')) {
+					@mkdir($dir_minify . 'cache/', 0755);
+				}
+
+				if ($this->config->get('theme_oct_ultrastore_scripts_in_footer')) {
+					$data['scripts'] = [];
+				} else {
+					$oct_scripts_name = md5(json_encode($this->document->getScripts('header', 'octemplates'))) . '.js';
+
+					if (!file_exists($dir_minify . 'cache/' . $oct_scripts_name)) {
+						$fscript = fopen($dir_minify . 'cache/' . $oct_scripts_name, "a");
+
+						foreach($this->document->getScripts('header', 'octemplates') as $href => $script) {
+							if (file_exists($this->request->server['DOCUMENT_ROOT'] . '/' . ltrim($href))) {
+								$link = parse_url($href);
+
+								if (!isset($link['host'])) {
+									$js_to = Minify_CSS_UriRewriter::rewrite(
+						                @file_get_contents($this->request->server['DOCUMENT_ROOT'] . '/' . ltrim($href))
+						                ,dirname($href)
+						            );
+
+									$js_to = str_replace('"background": "url("/catalog/view/javascript/ + self.params.additionalParams + self.resources.loading + ") no-repeat center center",','"background": "url(" + self.params.additionalParams + self.resources.loading + ") no-repeat center center",', $js_to);
+
+									fwrite($fscript, $js_to);
+								} else {
+									fwrite($fscript, @file_get_contents($href));
+								}
+
+								fwrite($fscript, PHP_EOL);
+							}
+						}
+
+						fclose($fscript);
+
+						if (file_exists($dir_minify . 'cache/' . $oct_scripts_name) && filesize($dir_minify . 'cache/' . $oct_scripts_name)) {
+							$oct_js_content = @file_get_contents($link_server . 'min/?f=min/cache/' . $oct_scripts_name);
+
+							if ($oct_js_content) {
+								file_put_contents($dir_minify . 'cache/' . $oct_scripts_name, '');
+
+								$fscript = fopen($dir_minify . 'cache/' . $oct_scripts_name, "a");
+								fwrite($fscript, $oct_js_content);
+								fclose($fscript);
+							}
+						}
+					}
+
+					if (file_exists($dir_minify . 'cache/' . $oct_scripts_name)) {
+						$data['scripts'] = [];
+
+						$data['scripts'][0] = 'min/?f=min/cache/' . $oct_scripts_name;
+					}
+				}
+
+				$oct_styles_name = md5(json_encode($this->document->getStyles('octemplates'))) . '.css';
+
+				if (!file_exists($dir_minify . 'cache/' . $oct_styles_name)) {
+					$fstyle = fopen($dir_minify . 'cache/' . $oct_styles_name, "a");
+
+					foreach($this->document->getStyles('octemplates') as $href => $styles) {
+						if (file_exists($this->request->server['DOCUMENT_ROOT'] . '/' . ltrim($href))) {
+							$link = parse_url($href);
+
+							if (!isset($link['host'])) {
+								$css_to = Minify_CSS_UriRewriter::rewrite(
+					                @file_get_contents($this->request->server['DOCUMENT_ROOT'] . '/' . ltrim($href))
+					                ,dirname($href)
+					            );
+
+								fwrite($fstyle, $css_to);
+							} else {
+								fwrite($fstyle, file_get_contents($href));
+							}
+
+							fwrite($fstyle, PHP_EOL);
+						}
+					}
+
+					fclose($fstyle);
+
+					if (file_exists($dir_minify . 'cache/' . $oct_styles_name) && filesize($dir_minify . 'cache/' . $oct_styles_name)) {
+						$oct_css_content = @file_get_contents($link_server . 'min/?f=min/cache/' . $oct_styles_name);
+
+						if ($oct_css_content) {
+							//Comments Delete
+							$oct_css_content = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $oct_css_content);
+
+							file_put_contents($dir_minify . 'cache/' . $oct_styles_name, '');
+
+							$fstyle = fopen($dir_minify . 'cache/' . $oct_styles_name, "a");
+							fwrite($fstyle, $oct_css_content);
+							fclose($fstyle);
+						}
+					}
+				}
+
+				if (file_exists($dir_minify . 'cache/' . $oct_styles_name)) {
+					$data['styles'] = [];
+
+					$data['styles'][0] = [
+						'href' => 'min/?f=min/cache/' . $oct_styles_name,
+						'rel' => 'stylesheet',
+						'media' => 'screen'
+					];
+				}
+			}
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$this->load->language('common/header');]]></search>
+			<add position="before"><![CDATA[
+			$data['oct_bar_data'] = $oct_bar_data = $this->config->get('theme_oct_ultrastore_bar_data');
+
+			if (isset($oct_bar_data['status']) && $oct_bar_data['status']) {
+				$data['bar_position'] = isset($oct_bar_data['position']) ? $oct_bar_data['position'] : 'left';
+
+				if (isset($oct_bar_data['show_cart']) && $oct_bar_data['show_cart']) {
+					$data['cart_total_bar'] = $this->cart->countProducts() + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0);
+				}
+
+				if (isset($oct_bar_data['show_wishlist']) && $oct_bar_data['show_wishlist']) {
+					$data['wishlist_link'] = $this->url->link('account/wishlist','', true);
+					$data['wishlist_total'] = (isset($this->session->data['wishlist']) ? count($this->session->data['wishlist']) : 0);
+				}
+
+				if (isset($oct_bar_data['show_compare']) && $oct_bar_data['show_compare']) {
+					$data['compare_link'] = $this->url->link('product/compare','', true);
+					$data['compare_total'] = (isset($this->session->data['compare']) ? count($this->session->data['compare']) : 0);
+				}
+			}
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$data['cart'] = $this->load->controller('common/cart');]]></search>
+			<add position="before"><![CDATA[
+			$data['cart_mobile'] = $this->load->controller('common/cart/mobile');
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/common/footer.php">
+		<operation error="skip">
+			<search><![CDATA[public function index() {]]></search>
+			<add position="after"><![CDATA[
+			$data['oct_ultrastore_data'] = $oct_ultrastore_data = $this->config->get('theme_oct_ultrastore_data');
+
+			$data['oct_lang_id'] = (int)$this->config->get('config_language_id');
+
+			$data['oct_jscode'] = html_entity_decode($this->config->get('theme_oct_ultrastore_js_code'), ENT_QUOTES, 'UTF-8');
+
+			$this->load->model('tool/image');
+
+			$data['oct_customer_paymets'] = [];
+
+			if (isset($oct_ultrastore_data['payments']['customers']) && !empty($oct_ultrastore_data['payments']['customers'])) {
+				foreach ($oct_ultrastore_data['payments']['customers'] as $oct_c_payment) {
+					if ((isset($oct_c_payment['status']) && $oct_c_payment['status'] == 'on') && isset($oct_c_payment['image']) && !empty($oct_c_payment['image']) && file_exists(DIR_IMAGE.$oct_c_payment['image'])) {
+						$data['oct_customer_paymets'][] = $this->model_tool_image->resize($oct_c_payment['image'], 52, 32);
+					}
+				}
+			}
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$data['scripts'] = $this->document->getScripts('footer');]]></search>
+			<add position="replace"><![CDATA[
+			$this->document->addStyle('catalog/view/theme/oct_ultrastore/stylesheet/bootstrap-reboot.min.css', 'stylesheet', 'screen', 'octemplates');
+			$this->document->addStyle('catalog/view/theme/oct_ultrastore/stylesheet/bootstrap.min.css', 'stylesheet', 'screen', 'octemplates');
+			$this->document->addStyle('catalog/view/theme/oct_ultrastore/stylesheet/fontawesome-free-5.6.1-web/css/all.css', 'stylesheet', 'screen', 'octemplates');
+			$this->document->addStyle('catalog/view/theme/oct_ultrastore/stylesheet/owl.carousel.min.css', 'stylesheet', 'screen', 'octemplates');
+			$this->document->addStyle('catalog/view/theme/oct_ultrastore/stylesheet/fonts.css', 'stylesheet', 'screen', 'octemplates');
+			$this->document->addStyle('catalog/view/theme/oct_ultrastore/stylesheet/main.css', 'stylesheet', 'screen', 'octemplates');
+			$this->document->addStyle('catalog/view/theme/oct_ultrastore/stylesheet/responsive.css', 'stylesheet', 'screen', 'octemplates');
+
+			if (file_exists(DIR_TEMPLATE.'oct_ultrastore/stylesheet/dynamic_stylesheet.css')) {
+				$file_size = filesize(DIR_TEMPLATE.'oct_ultrastore/stylesheet/dynamic_stylesheet.css');
+
+				if ($file_size) {
+					$this->document->addStyle('catalog/view/theme/oct_ultrastore/stylesheet/dynamic_stylesheet.css', 'stylesheet', 'screen', 'octemplates');
+				}
+			}
+
+			// custom css
+			if (file_exists(DIR_TEMPLATE.'oct_ultrastore/stylesheet/custom.min.css')) {
+				$file_size = filesize(DIR_TEMPLATE.'oct_ultrastore/stylesheet/custom.min.css');
+
+				if ($file_size) {
+					$this->document->addStyle('catalog/view/theme/oct_ultrastore/stylesheet/custom.min.css', 'stylesheet', 'screen', 'octemplates');
+				}
+			}
+
+			$oct_js_position = $this->config->get('theme_oct_ultrastore_scripts_in_footer') ? 'footer' : 'header';
+
+			$this->document->addScript('catalog/view/theme/oct_ultrastore/js/jquery-3.3.1.min.js', $oct_js_position, 'octemplates');
+			$this->document->addScript('catalog/view/theme/oct_ultrastore/js/popper.min.js', $oct_js_position, 'octemplates');
+			$this->document->addScript('catalog/view/theme/oct_ultrastore/js/bootstrap.min.js', $oct_js_position, 'octemplates');
+			$this->document->addScript('catalog/view/theme/oct_ultrastore/js/main.js', $oct_js_position, 'octemplates');
+			$this->document->addScript('catalog/view/theme/oct_ultrastore/js/bootstrap-notify/bootstrap-notify.js', $oct_js_position, 'octemplates');
+			$this->document->addScript('catalog/view/theme/oct_ultrastore/js/common.js', $oct_js_position, 'octemplates');
+			$this->document->addScript('catalog/view/theme/oct_ultrastore/js/scripts.min.js', $oct_js_position, 'octemplates');
+
+			if ($this->config->get('theme_oct_ultrastore_lazyload')) {
+				$this->document->addScript('catalog/view/theme/oct_ultrastore/js/lazyload/jquery.lazyload.min.js', $oct_js_position, 'octemplates');
+			}
+
+			if (isset($oct_ultrastore_data['minify']) && $oct_ultrastore_data['minify'] == 'on') {
+				if ($this->request->server['HTTPS']) {
+					$link_server = $this->config->get('config_ssl');
+				} else {
+					$link_server = $this->config->get('config_url');
+				}
+
+				$dir_minify = $this->request->server['DOCUMENT_ROOT'] . '/min/';
+
+				require_once $dir_minify . '/lib/Minify/CSS/UriRewriter.php';
+
+				if (!is_dir($dir_minify . 'cache/')) {
+					@mkdir($dir_minify . 'cache/', 0755);
+				}
+
+				if ($this->config->get('theme_oct_ultrastore_scripts_in_footer')) {
+					$oct_scripts_name = md5(json_encode($this->document->getScripts('footer', 'octemplates'))) . '.js';
+
+					if (!file_exists($dir_minify . 'cache/' . $oct_scripts_name)) {
+						$fscript = fopen($dir_minify . 'cache/' . $oct_scripts_name, "a");
+
+						foreach($this->document->getScripts('footer', 'octemplates') as $href => $script) {
+							if (file_exists($this->request->server['DOCUMENT_ROOT'] . '/' . ltrim($href))) {
+								$link = parse_url($href);
+								if (!isset($link['host'])) {
+									$js_to = Minify_CSS_UriRewriter::rewrite(
+						                @file_get_contents($this->request->server['DOCUMENT_ROOT'] . '/' . ltrim($href))
+						                ,dirname($href)
+						            );
+
+									$js_to = str_replace('"background": "url("/catalog/view/javascript/ + self.params.additionalParams + self.resources.loading + ") no-repeat center center",','"background": "url(" + self.params.additionalParams + self.resources.loading + ") no-repeat center center",', $js_to);
+
+									fwrite($fscript, $js_to);
+								} else {
+									fwrite($fscript, file_get_contents($href));
+								}
+
+								fwrite($fscript, PHP_EOL);
+							}
+						}
+
+						fclose($fscript);
+
+						if (file_exists($dir_minify . 'cache/' . $oct_scripts_name) && filesize($dir_minify . 'cache/' . $oct_scripts_name)) {
+							$oct_js_content = @file_get_contents($link_server . 'min/?f=min/cache/' . $oct_scripts_name);
+
+							if ($oct_js_content) {
+								file_put_contents($dir_minify . 'cache/' . $oct_scripts_name, '');
+
+								$fscript = fopen($dir_minify . 'cache/' . $oct_scripts_name, "a");
+								fwrite($fscript, $oct_js_content);
+								fclose($fscript);
+							}
+						}
+					}
+
+					if (file_exists($dir_minify . 'cache/' . $oct_scripts_name)) {
+						$data['scripts'] = [];
+
+						$data['scripts'][0] = 'min/?f=min/cache/' . $oct_scripts_name;
+					}
+				} else {
+					$data['scripts'] = [];
+				}
+			}
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[foreach ($this->model_catalog_information->getInformations() as $result) {]]></search>
+			<add position="replace" offset="7"><![CDATA[
+			if (isset($data['oct_ultrastore_data']['footer_information_links']) && !empty($data['oct_ultrastore_data']['footer_information_links'])) {
+				foreach ($data['oct_ultrastore_data']['footer_information_links'] as $information_id) {
+					$information_info = $this->model_catalog_information->getInformation($information_id);
+
+					if ($information_info) {
+						$data['informations'][] = array(
+							'title' => $information_info['title'],
+							'href'  => $this->url->link('information/information', 'information_id=' . $information_id, true)
+						);
+					}
+				}
+			} else {
+				foreach ($this->model_catalog_information->getInformations() as $result) {
+					if ($result['bottom']) {
+						$data['informations'][] = array(
+							'title' => $result['title'],
+							'href'  => $this->url->link('information/information', 'information_id=' . $result['information_id'])
+						);
+					}
+				}
+			}
+			]]></add>
+		</operation>
+		<operation>
+			<search><![CDATA[$data['newsletter'] = $this->url->link('account/newsletter', '', true);]]></search>
+			<add position="after"><![CDATA[
+			if (isset($data['oct_ultrastore_data']['footer_link_contact']) && $data['oct_ultrastore_data']['footer_link_contact'] == 'on') {
+				$data['informations'][] = array(
+					'title' => $this->language->get('text_contact'),
+					'href'  => $this->url->link('information/contact')
+				);
+			}
+
+			if (isset($data['oct_ultrastore_data']['footer_link_return']) && $data['oct_ultrastore_data']['footer_link_return'] == 'on') {
+				$data['informations'][] = array(
+					'title' => $this->language->get('text_return'),
+					'href'  => $this->url->link('account/return/add', '', true)
+				);
+			}
+
+			if (isset($data['oct_ultrastore_data']['footer_link_sitemap']) && $data['oct_ultrastore_data']['footer_link_sitemap'] == 'on') {
+				$data['informations'][] = array(
+					'title' => $this->language->get('text_sitemap'),
+					'href'  => $this->url->link('information/sitemap')
+				);
+			}
+
+			if (isset($data['oct_ultrastore_data']['footer_link_man']) && $data['oct_ultrastore_data']['footer_link_man'] == 'on') {
+				$data['informations'][] = array(
+					'title' => $this->language->get('text_manufacturer'),
+					'href'  => $this->url->link('product/manufacturer')
+				);
+			}
+
+			if (isset($data['oct_ultrastore_data']['footer_link_cert']) && $data['oct_ultrastore_data']['footer_link_cert'] == 'on') {
+				$data['informations'][] = array(
+					'title' => $this->language->get('text_voucher'),
+					'href'  => $this->url->link('account/voucher', '', true)
+				);
+			}
+
+			if (isset($data['oct_ultrastore_data']['footer_link_specials']) && $data['oct_ultrastore_data']['footer_link_specials'] == 'on') {
+				$data['informations'][] = array(
+					'title' => $this->language->get('text_special'),
+					'href'  => $this->url->link('product/special')
+				);
+			}
+
+			if (isset($data['oct_ultrastore_data']['footer_category_links']) && !empty($data['oct_ultrastore_data']['footer_category_links'])) {
+				$this->load->model('catalog/category');
+
+				foreach ($data['oct_ultrastore_data']['footer_category_links'] as $category_id) {
+					$category_info = $this->model_catalog_category->getOCTCategory($category_id);
+
+					if ($category_info) {
+						$path = ($category_info['path']) ? $category_info['path'] . '_' . $category_info['category_id'] : $category_info['category_id'];
+
+						$data['categories'][] = array(
+							'name' => $category_info['name'],
+							'href'  => $this->url->link('product/category', 'path=' . $path, true)
+						);
+					}
+				}
+			}
+
+			if (isset($data['oct_ultrastore_data']['contact_open'][(int)$this->config->get('config_language_id')])){
+				$oct_contact_opens = explode(PHP_EOL, $data['oct_ultrastore_data']['contact_open'][(int)$this->config->get('config_language_id')]);
+
+				foreach ($oct_contact_opens as $oct_contact_open) {
+					if (!empty($oct_contact_open)) {
+						$data['oct_contact_opens'][] = $oct_contact_open;
+					}
+				}
+			}
+
+			$oct_contact_telephones = explode(PHP_EOL, $data['oct_ultrastore_data']['contact_telephone']);
+
+			foreach ($oct_contact_telephones as $oct_contact_telephone) {
+				if (!empty($oct_contact_telephone)) {
+					$data['oct_contact_telephones'][] = $oct_contact_telephone;
+				}
+			}
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/view/theme/oct_ultrastore/template/common/header.twig">
+		<operation error="skip">
+			<search><![CDATA[<body>]]></search>
+			<add position="after"><![CDATA[
+			{% if oct_bar_data.status is defined and oct_bar_data.status  %}
+			<div class="oct-fixed-bar fixed-{{ bar_position }}">
+				{% if oct_bar_data.show_wishlist is defined and oct_bar_data.show_wishlist %}
+				<div class="oct-fixed-bar-item oct-fixed-bar-wishlist">
+					<a href="{{ wishlist_link }}" class="oct-fixed-bar-link" title="{{ fixed_bar_wishlist }}"><i class="fas fa-heart"></i><span id="oct-wishlist-quantity" class="oct-fixed-bar-quantity">{{ wishlist_total }}</span></a>
+				</div>
+				{% endif %}
+				{% if oct_bar_data.show_compare is defined and oct_bar_data.show_compare %}
+				<div class="oct-fixed-bar-item oct-fixed-bar-compare">
+					<a href="{{ compare_link }}" class="oct-fixed-bar-link" title="{{ fixed_bar_compare }}"><i class="fas fa-chart-bar"></i><span id="oct-compare-quantity" class="oct-fixed-bar-quantity">{{ compare_total }}</span></a>
+				</div>
+				{% endif %}
+				{% if oct_bar_data.show_cart is defined and oct_bar_data.show_cart %}
+				<div class="oct-fixed-bar-item oct-fixed-bar-cart">
+					{% if oct_popup_cart_status is defined and oct_popup_cart_status %}
+					<a href="javascript:;" onclick="octPopupCart()" class="oct-fixed-bar-link" title="{{ fixed_bar_cart }}">
+					{% else %}
+					<a href="{{ shopping_cart }}" class="oct-fixed-bar-link" title="{{ fixed_bar_cart }}">
+					{% endif %}
+					<i class="fas fa-shopping-cart"></i><span id="oct-cart-quantity" class="oct-fixed-bar-quantity">{{ cart_total_bar }}</span></a>
+				</div>
+				{% endif %}
+			</div>
+			{% endif %}
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/view/theme/oct_ultrastore/template/common/footer.twig">
+		<operation error="skip">
+			<search><![CDATA[<footer>]]></search>
+			<add position="after"><![CDATA[
+			{% if oct_ultrastore_data.footer_totop is defined and oct_ultrastore_data.footer_totop %}
+			<div id="back-top">
+		        <a href="#top"><i class="fas fa-chevron-up"></i></a>
+		    </div>
+			{% endif %}
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[</body>]]></search>
+			<add position="before"><![CDATA[
+			{% if oct_jscode is defined and oct_jscode %}
+			<script>
+			{{ oct_jscode }}
+			</script>
+			{% endif %}
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/octemplates/module/oct_popup_view.php">
+		<operation error="skip">
+			<search><![CDATA[$oct_popup_view_data = $this->config->get('oct_popup_view_data');]]></search>
+			<add position="before"><![CDATA[
+			$data['oct_ultrastore_data'] = $oct_ultrastore_data = $this->config->get('theme_oct_ultrastore_data');
+
+			if (isset($oct_ultrastore_data['product_js_button']) && !empty($oct_ultrastore_data['product_js_button'])) {
+				$data['product_js_button'] = html_entity_decode($oct_ultrastore_data['product_js_button'], ENT_QUOTES, 'UTF-8');
+			}
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/product/product.php">
+		<operation error="skip">
+			<search><![CDATA[public function index() {]]></search>
+			<add position="after"><![CDATA[
+			$data['oct_ultrastore_data'] = $oct_ultrastore_data = $this->config->get('theme_oct_ultrastore_data');
+
+			if (isset($oct_ultrastore_data['product_js_button']) && !empty($oct_ultrastore_data['product_js_button'])) {
+				$data['product_js_button'] = html_entity_decode($oct_ultrastore_data['product_js_button'], ENT_QUOTES, 'UTF-8');
+			}
+
+			if (isset($oct_ultrastore_data['product_dop_tab']) && !empty($oct_ultrastore_data['product_dop_tab'])) {
+				$data['dop_tab'] = [
+					'title' => isset($oct_ultrastore_data['product_dop_tab_title'][(int)$this->config->get('config_language_id')]) ? html_entity_decode($oct_ultrastore_data['product_dop_tab_title'][(int)$this->config->get('config_language_id')], ENT_QUOTES, 'UTF-8') : '',
+					'text' => isset($oct_ultrastore_data['product_dop_tab_text'][(int)$this->config->get('config_language_id')]) ? html_entity_decode($oct_ultrastore_data['product_dop_tab_text'][(int)$this->config->get('config_language_id')], ENT_QUOTES, 'UTF-8') : '',
+				];
+			}
+
+			if ((isset($oct_ultrastore_data['product_advantage']) && $oct_ultrastore_data['product_advantage'] == 'on') && (isset($oct_ultrastore_data['product_advantages']) && !empty($oct_ultrastore_data['product_advantages']))) {
+				foreach ($oct_ultrastore_data['product_advantages'] as $product_advantage) {
+					if (isset($product_advantage[(int)$this->config->get('config_language_id')]['title']) && !empty($product_advantage[(int)$this->config->get('config_language_id')]['title'])) {
+						if (isset($product_advantage[(int)$this->config->get('config_language_id')]['link'])) {
+							if ($product_advantage[(int)$this->config->get('config_language_id')]['link'] == "#" || empty($product_advantage[(int)$this->config->get('config_language_id')]['link'])) {
+								$link = "javascript:;";
+							} else {
+								$link = $product_advantage[(int)$this->config->get('config_language_id')]['link'];
+							}
+						} else {
+							$link = "javascript:;";
+						}
+
+						$data['oct_product_advantages'][] = [
+							'information_id' => isset($product_advantage['information_id']) && !empty($product_advantage['information_id']) ? (int)$product_advantage['information_id'] : 0,
+							'popup' => (isset($product_advantage['popup']) && !empty($product_advantage['popup'])) && (isset($product_advantage['information_id']) && !empty($product_advantage['information_id'])) && (isset($product_advantage['information_id']) && !empty($product_advantage['information_id'])) ? 1 : 0,
+							'icone' => strip_tags(html_entity_decode($product_advantage['icone'], ENT_QUOTES, 'UTF-8')),
+							'title' => strip_tags(html_entity_decode($product_advantage[(int)$this->config->get('config_language_id')]['title'], ENT_QUOTES, 'UTF-8')),
+							'text' => isset($product_advantage[(int)$this->config->get('config_language_id')]['text']) ? strip_tags(html_entity_decode($product_advantage[(int)$this->config->get('config_language_id')]['text'], ENT_QUOTES, 'UTF-8')) : '',
+							'link' => $link,
+						];
+					}
+				}
+			}
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$data['rating'] = (int)$product_info['rating'];]]></search>
+			<add position="after"><![CDATA[
+			$data['total_reviews'] = (int)$product_info['reviews'];
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$this->load->language('product/product');]]></search>
+			<add position="after"><![CDATA[
+			$data['out_of_stock'] = false;
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[if ($product_info['quantity'] <= 0) {]]></search>
+			<add position="before"><![CDATA[
+			if (!$this->config->get('config_stock_checkout') || $this->config->get('config_stock_warning')) {
+				$data['max_quantity'] = $product_info['quantity'];
+			}
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[if ($product_info['quantity'] <= 0) {]]></search>
+			<add position="after"><![CDATA[
+			$data['out_of_stock'] = true;
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$this->document->addScript('catalog/view/javascript/jquery/magnific/jquery.magnific-popup.min.js');]]></search>
+			<add position="replace"><![CDATA[
+			//$this->document->addScript('catalog/view/javascript/jquery/magnific/jquery.magnific-popup.min.js');
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$this->document->addStyle('catalog/view/javascript/jquery/magnific/magnific-popup.css');]]></search>
+			<add position="replace"><![CDATA[
+			//$this->document->addStyle('catalog/view/javascript/jquery/magnific/magnific-popup.css');
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$this->document->addScript('catalog/view/javascript/jquery/datetimepicker/moment/moment.min.js');]]></search>
+			<add position="replace"><![CDATA[
+			//$this->document->addScript('catalog/view/javascript/jquery/datetimepicker/moment/moment.min.js');
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$this->document->addScript('catalog/view/javascript/jquery/datetimepicker/moment/moment-with-locales.min.js');]]></search>
+			<add position="replace"><![CDATA[
+			//$this->document->addScript('catalog/view/javascript/jquery/datetimepicker/moment/moment-with-locales.min.js');
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$this->document->addScript('catalog/view/javascript/jquery/datetimepicker/bootstrap-datetimepicker.min.js');]]></search>
+			<add position="replace"><![CDATA[
+			//$this->document->addScript('catalog/view/javascript/jquery/datetimepicker/bootstrap-datetimepicker.min.js');
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$this->document->addStyle('catalog/view/javascript/jquery/datetimepicker/bootstrap-datetimepicker.min.css');]]></search>
+			<add position="replace"><![CDATA[
+			//$this->document->addStyle('catalog/view/javascript/jquery/datetimepicker/bootstrap-datetimepicker.min.css');
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$data['options'] = array();]]></search>
+			<add position="after"><![CDATA[
+			$oct_add_datetimepicker = false;
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$data['attribute_groups'] = $this->model_catalog_product->getProductAttributes($this->request->get['product_id']);]]></search>
+			<add position="before"><![CDATA[
+			foreach ($data['options'] as $option) {
+				if ($option['type'] == 'date' || $option['type'] == 'time' || $option['type'] == 'datetime') {
+					$data['oct_datetimepicker'] = $oct_add_datetimepicker = true;
+
+					break;
+				}
+			}
+
+			if ($oct_add_datetimepicker) {
+				$this->document->addScript('catalog/view/javascript/jquery/datetimepicker/moment/moment.min.js');
+				$this->document->addScript('catalog/view/javascript/jquery/datetimepicker/moment/moment-with-locales.min.js');
+				$this->document->addScript('catalog/view/theme/oct_ultrastore/js/bootstrap-datetimepicker.min.js');
+				$this->document->addStyle('catalog/view/javascript/jquery/datetimepicker/bootstrap-datetimepicker.min.css');
+			}
+
+			$this->document->addStyle('catalog/view/theme/oct_ultrastore/stylesheet/owl.carousel.min.css');
+			$this->document->addScript('catalog/view/theme/oct_ultrastore/js/owl.carousel.min.js');
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$results = $this->model_catalog_product->getProductImages($this->request->get['product_id']);]]></search>
+			<add position="after"><![CDATA[
+			if ($data['popup'] && $data['thumb'] && !empty($results)) {
+				$data['images'][0] = array(
+					'popup' => $data['popup'],
+					'thumb' => $this->model_tool_image->resize($product_info['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_additional_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_additional_height'))
+				);
+			}
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$rating,]]></search>
+			<add position="after"><![CDATA[
+			'reviews'	  => $result['reviews'],
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$data['model'] = $product_info['model'];]]></search>
+			<add position="after"><![CDATA[
+			$data['sku'] = $product_info['sku'];
+			$data['upc'] = $product_info['upc'];
+			$data['ean'] = $product_info['ean'];
+			$data['mpn'] = $product_info['mpn'];
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$data['description'] = html_entity_decode($product_info['description'], ENT_QUOTES, 'UTF-8');]]></search>
+			<add position="replace"><![CDATA[
+			$data['description'] = str_replace("<img", "<img class='img-fluid'", html_entity_decode($product_info['description'], ENT_QUOTES, 'UTF-8'));
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[public function review() {]]></search>
+			<add position="before"><![CDATA[
+			public function updatePrices() {
+				if ((isset($this->request->post['product_id']) && isset($this->request->post['quantity'])) && isset($this->request->server['HTTP_X_REQUESTED_WITH']) && !empty($this->request->server['HTTP_X_REQUESTED_WITH']) && strtolower($this->request->server['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+			        $json = [];
+
+					if ($this->request->post['product_id'] && $this->request->post['quantity']) {
+						$this->load->model('catalog/product');
+
+						$json['special'] = false;
+						$json['you_save'] = false;
+
+						$option_price = 0;
+
+						$product_id = (int)$this->request->post['product_id'];
+						$quantity = (int)$this->request->post['quantity'];
+
+						$product_info = $this->model_catalog_product->getOCTProductPrice($product_id, $quantity);
+						$product_options = $this->model_catalog_product->getProductOptions($product_id);
+
+						if (!empty($this->request->post['option'])) {
+							$options = $this->request->post['option'];
+						} else {
+							$options = [];
+						}
+
+			            foreach ($product_options as $product_option) {
+			              	if (is_array($product_option['product_option_value'])) {
+			                	foreach ($product_option['product_option_value'] as $option_value) {
+									if (isset($options[$product_option['product_option_id']])) {
+										if (($options[$product_option['product_option_id']] == $option_value['product_option_value_id']) || ((is_array($options[$product_option['product_option_id']])) && (in_array($option_value['product_option_value_id'], $options[$product_option['product_option_id']])))) {
+											if ($option_value['price_prefix'] == '+') {
+												$option_price += $option_value['price'];
+											} elseif ($option_value['price_prefix'] == '-') {
+												$option_price -= $option_value['price'];
+											}
+										}
+									}
+								}
+							}
+			            }
+
+						$price = (float)$product_info['discount'] ? (float)$product_info['discount'] * (int)$quantity + (float)$option_price * (int)$quantity : (float)$product_info['price'] * (int)$quantity + (float)$option_price * (int)$quantity;
+
+						$special = (float)$product_info['special'] ? (float)$product_info['special'] * (int)$quantity + (float)$option_price * (int)$quantity : 0;
+
+						if ($special) {
+							$json['special'] = $this->currency->format($this->tax->calculate($special, $product_info['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);
+							$json['you_save'] = '-' . number_format(((float)$price - (float)$special) / (float)$price * 100, 0) . '%';
+						}
+
+						$json['price'] = $this->currency->format($this->tax->calculate($price, $product_info['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);
+
+						$json['tax'] = $this->currency->format((float)$special ? $special : $price, $this->session->data['currency']);
+					}
+
+					$this->response->addHeader('Content-Type: application/json');
+					$this->response->setOutput(json_encode($json));
+				} else {
+					$this->response->redirect($this->url->link('error/not_found', '', true));
+				}
+			}
+
+			public function OCTgallery() {
+				if ((isset($this->request->post['product_id']) && !empty($this->request->post['product_id'])) && isset($this->request->server['HTTP_X_REQUESTED_WITH']) && !empty($this->request->server['HTTP_X_REQUESTED_WITH']) && strtolower($this->request->server['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+					$this->load->model('catalog/product');
+
+
+
+					if (isset($this->request->post['product_id']) && !empty($this->request->post['product_id'])) {
+			            $data['product_id'] = $product_id = (int) $this->request->post['product_id'];
+			        } else {
+			            $data['product_id'] = $product_id = 0;
+			        }
+
+					if (isset($this->request->post['goto']) && !empty($this->request->post['goto'])) {
+			            $data['goto'] = (int)$this->request->post['goto'];
+			        } else {
+			            $data['goto'] = 0;
+			        }
+
+			        $product_info = $this->model_catalog_product->getProduct($product_id);
+
+					$data['oct_popup_purchase_status'] = false;
+
+			        if ($product_info) {
+						if ($product_info['quantity'] <= 0 && !$this->config->get('config_stock_checkout')) {
+							$data['oct_popup_purchase_status'] = false;
+						} elseif ($product_info['quantity'] <= 0 && $this->config->get('config_stock_checkout')) {
+							if ($this->config->get('config_checkout_guest') && $this->config->get('oct_popup_purchase_status')) {
+								$data['oct_popup_purchase_status'] = true;
+							}
+						} else {
+							if ($this->config->get('config_checkout_guest') && $this->config->get('oct_popup_purchase_status')) {
+								$data['oct_popup_purchase_status'] = true;
+							}
+						}
+
+				        $data['heading_title'] = $product_info['name'];
+
+				        $this->load->model('tool/image');
+
+						$data['images'] = [];
+
+						$results = $this->model_catalog_product->getProductImages($product_id);
+
+						if ($product_info['image']) {
+							$data['images'][0]['popup'] = $this->model_tool_image->resize($product_info['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_thumb_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_thumb_height'));
+						} else {
+							$data['images'][0]['popup'] = $this->model_tool_image->resize('no-thumb.png', $this->config->get('theme_' . $this->config->get('config_theme') . '_image_thumb_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_thumb_height'));
+						}
+
+						if ($product_info['image']) {
+							$data['images'][0]['thumb'] = $this->model_tool_image->resize($product_info['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_additional_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_additional_height'));
+						} else {
+							$data['images'][0]['thumb'] = $this->model_tool_image->resize('no-thumb.png', $this->config->get('theme_' . $this->config->get('config_theme') . '_image_additional_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_additional_height'));
+						}
+
+						foreach ($results as $result) {
+							$data['images'][] = array(
+								'popup' => $this->model_tool_image->resize($result['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_thumb_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_thumb_height')),
+								'thumb' => $this->model_tool_image->resize($result['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_additional_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_additional_height'))
+							);
+						}
+
+						if ($this->customer->isLogged() || !$this->config->get('config_customer_price')) {
+							$data['price'] = $this->currency->format($this->tax->calculate($product_info['price'], $product_info['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);
+						} else {
+							$data['price'] = false;
+						}
+
+						if ((float)$product_info['special']) {
+							$data['special'] = $this->currency->format($this->tax->calculate($product_info['special'], $product_info['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);
+						} else {
+							$data['special'] = false;
+						}
+
+				        $this->response->setOutput($this->load->view('octemplates/module/oct_product_gallery', $data));
+			        } else {
+				        $this->response->redirect($this->url->link('error/not_found', '', true));
+			        }
+				} else {
+					$this->response->redirect($this->url->link('error/not_found', '', true));
+				}
+			}
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$data['text_minimum'] = sprintf($this->language->get('text_minimum'), $product_info['minimum']);]]></search>
+			<add position="before"><![CDATA[
+			if ($this->config->get('theme_oct_ultrastore_seo_title_status')) {
+				$oct_seo_title_data = $this->config->get('theme_oct_ultrastore_seo_title_data');
+				
+				$oct_price = ($this->customer->isLogged() || !$this->config->get('config_customer_price')) ? $this->currency->format($this->tax->calculate($product_info['price'], $product_info['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']) : '';
+				$oct_special = ((float)$product_info['special']) ? $this->currency->format($this->tax->calculate($product_info['special'], $product_info['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']) : '';
+				
+				if ((isset($oct_seo_title_data['product']['title_status']) && $oct_seo_title_data['product']['title_status']) && (isset($oct_seo_title_data['product']['title'][$this->config->get('config_language_id')]) && !empty($oct_seo_title_data['product']['title'][$this->config->get('config_language_id')]))) {
+					$oct_replace = [
+						'[name]' => strip_tags(html_entity_decode($product_info['name'], ENT_QUOTES, 'UTF-8')),
+						'[price]' => $oct_price ? $oct_special ? $oct_special : $oct_price : '',
+						'[model]' => !empty($product_info['model']) ? strip_tags(html_entity_decode($product_info['model'], ENT_QUOTES, 'UTF-8')) : '',
+						'[sku]' => !empty($product_info['sku']) ? strip_tags(html_entity_decode($product_info['sku'], ENT_QUOTES, 'UTF-8')) : '',
+						'[category]' => (isset($category_info) && $category_info) ? strip_tags(html_entity_decode($category_info['name'], ENT_QUOTES, 'UTF-8')) : '',
+						'[manufacturer]' => !empty($product_info['manufacturer']) ? strip_tags(html_entity_decode($product_info['manufacturer'], ENT_QUOTES, 'UTF-8')) : '',
+						'[store]' => $this->config->get('config_name')
+					];
+					
+					$oct_seo_title = str_replace(array_keys($oct_replace), array_values($oct_replace), $oct_seo_title_data['product']['title'][$this->config->get('config_language_id')]);
+					
+					$this->document->setTitle($oct_seo_title);
+				}
+				
+				if ((isset($oct_seo_title_data['product']['description_status']) && $oct_seo_title_data['product']['description_status']) && (isset($oct_seo_title_data['product']['description'][$this->config->get('config_language_id')]) && !empty($oct_seo_title_data['product']['description'][$this->config->get('config_language_id')]))) {
+					$oct_replace = [
+						'[name]' => strip_tags(html_entity_decode($product_info['name'], ENT_QUOTES, 'UTF-8')),
+						'[price]' => $oct_price ? $oct_special ? $oct_special : $oct_price : '',
+						'[model]' => !empty($product_info['model']) ? strip_tags(html_entity_decode($product_info['model'], ENT_QUOTES, 'UTF-8')) : '',
+						'[sku]' => !empty($product_info['sku']) ? strip_tags(html_entity_decode($product_info['sku'], ENT_QUOTES, 'UTF-8')) : '',
+						'[category]' => (isset($category_info) && $category_info) ? strip_tags(html_entity_decode($category_info['name'], ENT_QUOTES, 'UTF-8')) : '',
+						'[manufacturer]' => !empty($product_info['manufacturer']) ? strip_tags(html_entity_decode($product_info['manufacturer'], ENT_QUOTES, 'UTF-8')) : '',
+						'[store]' => $this->config->get('config_name')
+					];
+					
+					$oct_seo_description = str_replace(array_keys($oct_replace), array_values($oct_replace), $oct_seo_title_data['product']['description'][$this->config->get('config_language_id')]);
+					
+					$this->document->setDescription($oct_seo_description);
+				}
+			}
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/model/catalog/product.php">
+		<operation error="skip">
+			<search><![CDATA[$sql .= " ORDER BY LCASE(" . $data['sort'] . ")";]]></search>
+			<add position="replace"><![CDATA[
+			$sql .= " ORDER BY ";
+
+			if ($this->config->get('theme_' . $this->config->get('config_theme') . '_no_quantity_last')) {
+				$sql .= "p.quantity > 0 DESC, ";
+			}
+
+			$sql .= "LCASE(" . $data['sort'] . ")";
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$sql .= " ORDER BY (CASE WHEN special IS NOT NULL THEN special WHEN discount IS NOT NULL THEN discount ELSE p.price END)";]]></search>
+			<add position="replace"><![CDATA[
+			$sql .= " ORDER BY ";
+
+			if ($this->config->get('theme_' . $this->config->get('config_theme') . '_no_quantity_last')) {
+				$sql .= "p.quantity > 0 DESC,";
+			}
+
+			$sql .= " (CASE WHEN special IS NOT NULL THEN special WHEN discount IS NOT NULL THEN discount ELSE p.price END)";
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$sql .= " ORDER BY " . $data['sort'];]]></search>
+			<add position="replace"><![CDATA[
+			$sql .= " ORDER BY ";
+
+			if ($this->config->get('theme_' . $this->config->get('config_theme') . '_no_quantity_last')) {
+				$sql .= "p.quantity > 0 DESC, ";
+			}
+
+			$sql .= $data['sort'];
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$sql .= " ORDER BY p.sort_order";]]></search>
+			<add position="replace"><![CDATA[
+			$sql .= " ORDER BY ";
+
+			if ($this->config->get('theme_' . $this->config->get('config_theme') . '_no_quantity_last')) {
+				$sql .= "p.quantity > 0 DESC, ";
+			}
+
+			$sql .= "p.sort_order";
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/product/category.php">
+		<operation error="skip">
+			<search><![CDATA[public function index() {]]></search>
+			<add position="after"><![CDATA[
+			$data['oct_ultrastore_data'] = $oct_ultrastore_data = $this->config->get('theme_oct_ultrastore_data');
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[foreach ($results as $result) {]]></search>
+			<add position="after"><![CDATA[
+			if ($result['image'] && file_exists(DIR_IMAGE.$result['image'])) {
+				$cat_image = $this->model_tool_image->resize($result['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_sub_category_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_sub_category_height'));
+			} else {
+				$cat_image = $this->model_tool_image->resize('placeholder.png', $this->config->get('theme_' . $this->config->get('config_theme') . '_image_sub_category_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_sub_category_height'));
+			}
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA['href' => $this->url->link('product/category', 'path=' . $this->request->get['path'] . '_' . $result['category_id'] . $url)]]></search>
+			<add position="before"><![CDATA[
+			'image' => $cat_image,
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$data['description'] = html_entity_decode($category_info['description'], ENT_QUOTES, 'UTF-8');]]></search>
+			<add position="before"><![CDATA[
+			if(!isset($oct_ultrastore_data['category_desc_in_page']) && $page > 1){
+				$data['description'] = '';
+				$data['thumb'] = false;
+			} else {
+				$data['description'] = str_replace("<img", "<img class='img-fluid'", html_entity_decode($category_info['description'], ENT_QUOTES, 'UTF-8'));
+			}
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$data['categories'] = array();]]></search>
+			<add position="after"><![CDATA[
+			if(isset($oct_ultrastore_data['category_view_subcats']) && $oct_ultrastore_data['category_view_subcats'] == 'on'){
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$data['products'] = array();]]></search>
+			<add position="before"><![CDATA[
+			}
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA['filter_filter'      => $filter,]]></search>
+			<add position="before"><![CDATA[
+			'filter_sub_category' => (isset($oct_ultrastore_data['category_subcat_products']) && $oct_ultrastore_data['category_subcat_products'] == 'on') ? true : false,
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA['description' => utf8_substr(trim(strip_tags(html_entity_decode($result['description'], ENT_QUOTES, 'UTF-8'))), 0, $this->config->get('theme_' . $this->config->get('config_theme') . '_product_description_length')) . '..',]]></search>
+			<add position="replace"><![CDATA[
+			'description' => (isset($oct_ultrastore_data['category_product_desc']) && $oct_ultrastore_data['category_product_desc'] == 'on') ? utf8_substr(trim(strip_tags(html_entity_decode($result['description'], ENT_QUOTES, 'UTF-8'))), 0, $this->config->get('theme_' . $this->config->get('config_theme') . '_product_description_length')) . '..' : false,
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$results = $this->model_catalog_category->getCategories($category_id);]]></search>
+			<add position="before"><![CDATA[
+			if(isset($this->request->server['HTTP_ACCEPT']) && strpos($this->request->server['HTTP_ACCEPT'], 'webp')) {
+				$oct_webP = 1;
+			} else {
+				$oct_webP = 0;
+			}
+
+			$oct_categories = $this->cache->get('octemplates.sub_categories.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . $this->config->get('config_customer_group_id') . '.' . (int)$category_id . '.' . $oct_webP);
+
+			if (!$oct_categories) {
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA['href' => $this->url->link('product/category', 'path=' . $this->request->get['path'] . '_' . $result['category_id'] . $url)]]></search>
+			<add position="after" offset="2"><![CDATA[
+				$oct_categories = $data['categories'];
+
+				$this->cache->set('octemplates.sub_categories.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . $this->config->get('config_customer_group_id') . '.' . (int)$category_id . '.' . $oct_webP, $oct_categories);
+			}
+
+			$data['categories'] = $oct_categories;
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$data['text_compare'] = sprintf($this->language->get('text_compare'), (isset($this->session->data['compare']) ? count($this->session->data['compare']) : 0));]]></search>
+			<add position="before"><![CDATA[
+			if ($this->config->get('theme_oct_ultrastore_seo_title_status')) {
+				$oct_seo_title_data = $this->config->get('theme_oct_ultrastore_seo_title_data');
+				
+				if ((isset($oct_seo_title_data['category']['title_status']) && $oct_seo_title_data['category']['title_status']) && (isset($oct_seo_title_data['category']['title'][$this->config->get('config_language_id')]) && !empty($oct_seo_title_data['category']['title'][$this->config->get('config_language_id')]))) {
+					$oct_replace = [
+						'[name]' => strip_tags(html_entity_decode($category_info['name'], ENT_QUOTES, 'UTF-8')),
+						'[store]' => $this->config->get('config_name')
+					];
+					
+					$oct_seo_title = str_replace(array_keys($oct_replace), array_values($oct_replace), $oct_seo_title_data['category']['title'][$this->config->get('config_language_id')]);
+					
+					$this->document->setTitle($oct_seo_title);
+				}
+				
+				if ((isset($oct_seo_title_data['category']['description_status']) && $oct_seo_title_data['category']['description_status']) && (isset($oct_seo_title_data['category']['description'][$this->config->get('config_language_id')]) && !empty($oct_seo_title_data['category']['description'][$this->config->get('config_language_id')]))) {
+					$oct_replace = [
+						'[name]' => strip_tags(html_entity_decode($category_info['name'], ENT_QUOTES, 'UTF-8')),
+						'[store]' => $this->config->get('config_name')
+					];
+					
+					$oct_seo_description = str_replace(array_keys($oct_replace), array_values($oct_replace), $oct_seo_title_data['category']['description'][$this->config->get('config_language_id')]);
+					
+					$this->document->setDescription($oct_seo_description);
+				}
+			}
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/extension/module/category.php">
+		<operation error="skip">
+			<search><![CDATA[$children_data[] = array(]]></search>
+			<add position="replace"><![CDATA[
+			// Level 3
+			$children_data_2 = [];
+			$children_2 = $this->model_catalog_category->getCategories($child['category_id']);
+
+			foreach ($children_2 as $child_2) {
+				$filter_data2 = [
+					'filter_category_id'  => $child_2['category_id'],
+					'filter_sub_category' => true
+				];
+
+				/*
+				$children_3 = $this->model_catalog_category->getCategories($child_2['category_id']);
+
+				$children_data_3 = [];
+
+				foreach ($children_3 as $child_3) {
+					$filter_data3 = [
+						'filter_category_id'  => $child_3['category_id'],
+						'filter_sub_category' => true
+					];
+
+					$children_data_3[] = [
+						'category_id' => $child_3['category_id'],
+						'name'  => $child_3['name'] . ($this->config->get('config_product_count') ? ' (' . $this->model_catalog_product->getTotalProducts($filter_data3) . ')' : ''),
+						'href'  => $this->url->link('product/category', 'path=' . $category['category_id'] . '_' . $child['category_id'] . '_' . $child_2['category_id'] . '_' . $child_3['category_id'])
+					];
+				}
+				*/
+
+				$children_data_2[] = [
+					//'children' => $children_data_3,
+					'category_id' => $child_2['category_id'],
+					'name'  => $child_2['name'] . ($this->config->get('config_product_count') ? ' (' . $this->model_catalog_product->getTotalProducts($filter_data2) . ')' : ''),
+					'href'  => $this->url->link('product/category', 'path=' . $category['category_id'] . '_' . $child['category_id'] . '_' . $child_2['category_id'])
+				];
+			}
+
+			$children_data[] = array(
+				'children' => $children_data_2,
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$this->load->model('catalog/category');]]></search>
+			<add position="before"><![CDATA[
+			if (isset($parts[2])) {
+				$data['ch_id'] = $parts[2];
+			} else {
+				$data['ch_id'] = 0;
+			}
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[if ($category['category_id'] == $data['category_id']) {]]></search>
+			<add position="replace"><![CDATA[
+			$oct_full_view = true;
+
+			if ($oct_full_view) {
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$categories = $this->model_catalog_category->getCategories(0);]]></search>
+			<add position="before"><![CDATA[
+			if(isset($this->request->server['HTTP_ACCEPT']) && strpos($this->request->server['HTTP_ACCEPT'], 'webp')) {
+				$oct_webP = 1;
+			} else {
+				$oct_webP = 0;
+			}
+
+			$result_all_categories = $this->cache->get('octemplates.module_category.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . $this->config->get('config_customer_group_id') . '.' . $oct_webP);
+
+			if (!$result_all_categories) {
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$categories = $this->model_catalog_category->getCategories(0);]]></search>
+			<add position="after"><![CDATA[
+			$result_all_categories = [];
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[return $this->load->view('extension/module/category', $data);]]></search>
+			<add position="before"><![CDATA[
+				$result_all_categories = $data['categories'];
+
+				$this->cache->set('octemplates.module_category.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . $this->config->get('config_customer_group_id') . '.' . $oct_webP, $result_all_categories);
+			}
+
+			$data['categories'] = $result_all_categories;
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/common/{content_top,column_left,column_right,content_bottom}.php">
+		<operation error="skip">
+			<search><![CDATA[if ($setting_info && $setting_info['status']) {]]></search>
+			<add position="replace"><![CDATA[
+			if ($setting_info && isset($setting_info['status']) && $setting_info['status']) {
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/common/cart.php">
+		<operation error="skip">
+			<search><![CDATA[$data['text_items'] = sprintf($this->language->get('text_items'), $this->cart->countProducts() + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0), $this->currency->format($total, $this->session->data['currency']));]]></search>
+			<add position="after"><![CDATA[
+			$data['total_products'] = $this->cart->countProducts() + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0);
+			$data['total_amount'] = $this->currency->format($total, $this->session->data['currency']);
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[public function info() {]]></search>
+			<add position="before"><![CDATA[
+			public function mobile() {
+				$data['oct_popup_cart_status'] = $this->config->get('theme_oct_ultrastore_popup_cart_status');
+
+				$data['cart_link'] = $this->url->link('checkout/cart');
+				$data['checkout_link'] = $this->url->link('checkout/checkout', '', true);
+				$data['wishlist_link'] = $this->url->link('account/wishlist', '', true);
+				$data['compare_link'] = $this->url->link('product/compare', '', true);
+
+				$data['total_products'] = $this->cart->countProducts() + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0);
+
+				return $this->load->view('common/cart_mobile', $data);
+			}
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/product/compare.php">
+		<operation error="skip">
+			<search><![CDATA[$json['total'] = sprintf($this->language->get('text_compare'), (isset($this->session->data['compare']) ? count($this->session->data['compare']) : 0));]]></search>
+			<add position="after"><![CDATA[
+			$json['total_compare'] = (isset($this->session->data['compare']) ? count($this->session->data['compare']) : 0);
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/account/wishlist.php">
+		<operation error="skip">
+			<search><![CDATA[$json['total'] = sprintf($this->language->get('text_wishlist'), (isset($this->session->data['wishlist']) ? count($this->session->data['wishlist']) : 0));]]></search>
+			<add position="after"><![CDATA[
+			$json['total_wishlist'] = (isset($this->session->data['wishlist']) ? count($this->session->data['wishlist']) : 0);
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/account/account.php">
+		<operation error="skip">
+			<search><![CDATA[$this->load->model('account/customer');]]></search>
+			<add position="after"><![CDATA[
+			$customer_info = $this->model_account_customer->getCustomer($this->customer->getId());
+			$data['email'] = $customer_info['email'];
+			$data['firstname'] = $customer_info['firstname'];
+			$data['url_contacts'] = $this->url->link('information/contact', '', true);
+
+			$data['orders'] = [];
+			$this->load->model('account/order');
+			$order_total = $this->model_account_order->getTotalOrders();
+			$page = 1;
+			$results = $this->model_account_order->getOrders(($page - 1) * 10, 10);
+
+			foreach ($results as $result) {
+				$product_total = $this->model_account_order->getTotalOrderProductsByOrderId($result['order_id']);
+				$voucher_total = $this->model_account_order->getTotalOrderVouchersByOrderId($result['order_id']);
+
+				$data['orders'][] = [
+					'order_id'   => $result['order_id'],
+					'status'     => $result['status'],
+					'date_added' => date($this->language->get('date_format_short'), strtotime($result['date_added'])),
+					'total'      => $this->currency->format($result['total'], $result['currency_code'], $result['currency_value']),
+					'href'       => $this->url->link('account/order/info', 'order_id=' . $result['order_id'], 'SSL'),
+				];
+			}
+			]]></add>
+		</operation>
+	</file>
+
+	<file path="catalog/controller/checkout/cart.php">
+		<operation error="skip">
+			<search><![CDATA[$json['total'] = sprintf($this->language->get('text_items'), $this->cart->countProducts() + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0), $this->currency->format($total, $this->session->data['currency']));]]></search>
+			<add position="after"><![CDATA[
+			$json['total_products'] = $this->cart->countProducts() + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0);
+			$json['total_amount'] = $this->currency->format($total, $this->session->data['currency']);
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$this->cart->add($this->request->post['product_id'], $quantity, $option, $recurring_id);]]></search>
+			<add position="before" offset="1"><![CDATA[
+			if ((!$product_info['quantity'] || ($product_info['quantity'] < $quantity)) && (!$this->config->get('config_stock_checkout') || $this->config->get('config_stock_warning'))) {
+				if	($product_info['quantity'] < 1) {
+					$json['error']['error_warning'] = $this->language->get('error_no_stock');
+				} else {
+					$json['error']['error_warning'] = sprintf($this->language->get('error_limited_stock'), $product_info['quantity']);
+				}
+			}
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search index="0"><![CDATA[$json['total_amount'] = $this->currency->format($total, $this->session->data['currency']);]]></search>
+			<add position="after"><![CDATA[
+			} elseif (isset($json['error']['error_warning']) && $json['error']['error_warning']) {
+				$json['error']['error_warning'];]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/extension/module/oct_products_from_category.php">
+		<operation error="skip">
+			<search><![CDATA[$product_info['rating'],]]></search>
+			<add position="after"><![CDATA[
+			'reviews'	  => $product_info['reviews'],
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/extension/module/{bestseller,latest,special}.php">
+		<operation error="skip">
+			<search><![CDATA[$rating,]]></search>
+			<add position="after"><![CDATA[
+			'reviews'	  => $result['reviews'],
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/octemplates/blog/oct_blogarticle.php">
+		<operation error="skip">
+			<search><![CDATA[$rating,]]></search>
+			<add position="after"><![CDATA[
+			'reviews'	  => $result['reviews'],
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/extension/module/featured.php">
+		<operation error="skip">
+			<search><![CDATA[$rating,]]></search>
+			<add position="after"><![CDATA[
+			'reviews'	  => $product_info['reviews'],
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/product/{category,manufacturer,search,special}.php">
+		<!--		<operation error="skip">-->
+		<!--			<search><![CDATA[$result['rating'],]]></search>-->
+		<!--			<add position="after"><![CDATA[-->
+		<!--			'reviews'	  => $result['reviews'],-->
+		<!--			'quantity'	  => $result['quantity'] <= 0 ? true : false,-->
+		<!--			]]></add>-->
+		<!--    	</operation>-->
+		<operation error="skip">
+			<search><![CDATA[$result['rating'],]]></search>
+			<add position="after"><![CDATA[
+			'reviews'	  => $result['reviews'],
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/product/manufacturer.php">
+		<operation error="skip">
+			<search><![CDATA[public function index() {]]></search>
+			<add position="after"><![CDATA[
+			$oct_ultrastore_data = $this->config->get('theme_oct_ultrastore_data');
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$data['categories'][$key]['manufacturer'][] = array(]]></search>
+			<add position="before"><![CDATA[
+			if (isset($oct_ultrastore_data['man_logo']) && $oct_ultrastore_data['man_logo'] == 'on') {
+				if ($result['image'] && is_file(DIR_IMAGE . $result['image'])) {
+					$image = $this->model_tool_image->resize($result['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_manufacturer_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_manufacturer_height'));
+				} else {
+					$image = $this->model_tool_image->resize('placeholder.png', $this->config->get('theme_' . $this->config->get('config_theme') . '_image_manufacturer_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_manufacturer_height'));
+				}
+			} else {
+				$image = false;
+			}
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA['href' => $this->url->link('product/manufacturer/info', 'manufacturer_id=' . $result['manufacturer_id'])]]></search>
+			<add position="before"><![CDATA[
+			'image' => $image,
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$data['text_compare'] = sprintf($this->language->get('text_compare'), (isset($this->session->data['compare']) ? count($this->session->data['compare']) : 0));]]></search>
+			<add position="before"><![CDATA[
+			if ($this->config->get('theme_oct_ultrastore_seo_title_status')) {
+				$oct_seo_title_data = $this->config->get('theme_oct_ultrastore_seo_title_data');
+				
+				if ((isset($oct_seo_title_data['manufacturer']['title_status']) && $oct_seo_title_data['manufacturer']['title_status']) && (isset($oct_seo_title_data['manufacturer']['title'][$this->config->get('config_language_id')]) && !empty($oct_seo_title_data['manufacturer']['title'][$this->config->get('config_language_id')]))) {
+					$oct_replace = [
+						'[name]' => strip_tags(html_entity_decode($manufacturer_info['name'], ENT_QUOTES, 'UTF-8')),
+						'[store]' => $this->config->get('config_name')
+					];
+					
+					$oct_seo_title = str_replace(array_keys($oct_replace), array_values($oct_replace), $oct_seo_title_data['manufacturer']['title'][$this->config->get('config_language_id')]);
+					
+					$this->document->setTitle($oct_seo_title);
+				}
+				
+				if ((isset($oct_seo_title_data['manufacturer']['description_status']) && $oct_seo_title_data['manufacturer']['description_status']) && (isset($oct_seo_title_data['manufacturer']['description'][$this->config->get('config_language_id')]) && !empty($oct_seo_title_data['manufacturer']['description'][$this->config->get('config_language_id')]))) {
+					$oct_replace = [
+						'[name]' => strip_tags(html_entity_decode($manufacturer_info['name'], ENT_QUOTES, 'UTF-8')),
+						'[store]' => $this->config->get('config_name')
+					];
+					
+					$oct_seo_description = str_replace(array_keys($oct_replace), array_values($oct_replace), $oct_seo_title_data['manufacturer']['description'][$this->config->get('config_language_id')]);
+					
+					$this->document->setDescription($oct_seo_description);
+				}
+			}
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/account/*.php">
+		<operation error="skip">
+			<search><![CDATA[$data['header'] = $this->load->controller('common/header');]]></search>
+			<add position="after"><![CDATA[
+			$oct_data['breadcrumbs'] = $data['breadcrumbs'];
+
+			$data['oct_breadcrumbs'] = $this->load->controller('common/header/octBreadcrumbs', $oct_data);
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/affiliate/*.php">
+		<operation error="skip">
+			<search><![CDATA[$data['header'] = $this->load->controller('common/header');]]></search>
+			<add position="after"><![CDATA[
+			$oct_data['breadcrumbs'] = $data['breadcrumbs'];
+
+			$data['oct_breadcrumbs'] = $this->load->controller('common/header/octBreadcrumbs', $oct_data);
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/checkout/*.php">
+		<operation error="skip">
+			<search><![CDATA[$data['header'] = $this->load->controller('common/header');]]></search>
+			<add position="after"><![CDATA[
+			$oct_data['breadcrumbs'] = $data['breadcrumbs'];
+
+			$data['oct_breadcrumbs'] = $this->load->controller('common/header/octBreadcrumbs', $oct_data);
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/error/*.php">
+		<operation error="skip">
+			<search><![CDATA[$data['header'] = $this->load->controller('common/header');]]></search>
+			<add position="after"><![CDATA[
+			$oct_data['breadcrumbs'] = $data['breadcrumbs'];
+
+			$data['oct_breadcrumbs'] = $this->load->controller('common/header/octBreadcrumbs', $oct_data);
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/information/*.php">
+		<operation error="skip">
+			<search><![CDATA[$data['header'] = $this->load->controller('common/header');]]></search>
+			<add position="after"><![CDATA[
+			$oct_data['breadcrumbs'] = $data['breadcrumbs'];
+
+			$data['oct_breadcrumbs'] = $this->load->controller('common/header/octBreadcrumbs', $oct_data);
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/product/*.php">
+		<operation error="skip">
+			<search><![CDATA[$data['header'] = $this->load->controller('common/header');]]></search>
+			<add position="after"><![CDATA[
+			$oct_data['breadcrumbs'] = $data['breadcrumbs'];
+
+			$data['oct_breadcrumbs'] = $this->load->controller('common/header/octBreadcrumbs', $oct_data);
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/octemplates/blog/*.php">
+		<operation error="skip">
+			<search><![CDATA[$data['header'] = $this->load->controller('common/header');]]></search>
+			<add position="after"><![CDATA[
+			$oct_data['breadcrumbs'] = $data['breadcrumbs'];
+
+			$data['oct_breadcrumbs'] = $this->load->controller('common/header/octBreadcrumbs', $oct_data);
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/extension/module/{slideshow,carousel}.php">
+		<operation error="skip">
+			<search><![CDATA[$this->document->addStyle('catalog/view/javascript/jquery/swiper/css/swiper.min.css');]]></search>
+			<add position="replace"><![CDATA[
+			//$this->document->addStyle('catalog/view/javascript/jquery/swiper/css/swiper.min.css');
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$this->document->addStyle('catalog/view/javascript/jquery/swiper/css/opencart.css');]]></search>
+			<add position="replace"><![CDATA[
+			//$this->document->addStyle('catalog/view/javascript/jquery/swiper/css/opencart.css');
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$this->document->addScript('catalog/view/javascript/jquery/swiper/js/swiper.jquery.js');]]></search>
+			<add position="replace"><![CDATA[
+			//$this->document->addScript('catalog/view/javascript/jquery/swiper/js/swiper.jquery.js');
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$data['banners'] = array();]]></search>
+			<add position="before"><![CDATA[
+			$this->document->addStyle('catalog/view/theme/oct_ultrastore/stylesheet/owl.carousel.min.css');
+			$this->document->addScript('catalog/view/theme/oct_ultrastore/js/owl.carousel.min.js');
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/model/tool/image.php">
+		<operation error="skip">
+			<search><![CDATA[$image_new = str_replace(' ', '%20', $image_new);]]></search>
+			<add position="after"><![CDATA[
+			$oct_webp_image = $octWebpIs = false;
+
+			$gd = gd_info();
+
+			if (isset($gd['WebP Support']) && $gd['WebP Support'] && (isset($this->request->server['HTTP_ACCEPT']) && strpos($this->request->server['HTTP_ACCEPT'], 'webp')) && $this->config->get('theme_oct_ultrastore_webp')) {
+				$octWebpIs = true;
+			}
+
+			if ($octWebpIs && $extension != 'gif') {
+				$oct_webp_image = 'cache/webp/' . utf8_substr($filename, 0, utf8_strrpos($filename, '.')) . '-' . (int)$width . 'x' . (int)$height . '.webp';
+
+				if (!is_file(DIR_IMAGE . $oct_webp_image) || (filemtime(DIR_IMAGE . $image_new) > filemtime(DIR_IMAGE . $oct_webp_image))) {
+					$path = '';
+
+					$directories = explode('/', dirname($oct_webp_image));
+
+					foreach ($directories as $directory) {
+						$path = $path . '/' . $directory;
+
+						if (!is_dir(DIR_IMAGE . $path)) {
+							@mkdir(DIR_IMAGE . $path, 0777);
+						}
+					}
+
+					if (strtolower($extension) == 'jpg') {
+						$image_original = imagecreatefromjpeg(DIR_IMAGE . $image_new);
+					} elseif (strtolower($extension) == 'png') {
+						$image_original = imagecreatefrompng(DIR_IMAGE . $image_new);
+					}
+
+					if (isset($image_original)) {
+						imagewebp($image_original, DIR_IMAGE . $oct_webp_image, 85);
+						imagedestroy($image_original);
+
+						if (filesize(DIR_IMAGE . $oct_webp_image) % 2 == 1) {
+							file_put_contents(DIR_IMAGE . $oct_webp_image, "\0", FILE_APPEND);
+						}
+					} else {
+						$oct_webp_image = false;
+					}
+				}
+			}
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[. $image_new;]]></search>
+			<add position="replace"><![CDATA[. ($oct_webp_image ? $oct_webp_image : $image_new);]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/information/contact.php">
+		<operation error="skip">
+			<search><![CDATA[public function index() {]]></search>
+			<add position="after"><![CDATA[
+			$oct_ultrastore_data = $this->config->get('theme_oct_ultrastore_data');
+
+			if ((isset($oct_ultrastore_data['contact_view_map']) && $oct_ultrastore_data['contact_view_map'] == 'on') && (isset($oct_ultrastore_data['contact_map']) && !empty($oct_ultrastore_data['contact_map']))) {
+				$data['contact_map'] = html_entity_decode($oct_ultrastore_data['contact_map'], ENT_QUOTES, 'UTF-8');
+			}
+
+			if (isset($oct_ultrastore_data['contact_view_html'][(int)$this->config->get('config_language_id')]) && !empty(strip_tags($oct_ultrastore_data['contact_view_html'][(int)$this->config->get('config_language_id')]))) {
+				$data['contact_html'] = html_entity_decode($oct_ultrastore_data['contact_view_html'][(int)$this->config->get('config_language_id')], ENT_QUOTES, 'UTF-8');
+			}
+
+			if ($this->config->get('config_account_id')) {
+	            $this->load->model('catalog/information');
+
+	            $information_info = $this->model_catalog_information->getInformation($this->config->get('config_account_id'));
+
+	            if ($information_info) {
+	                $data['text_terms'] = sprintf($this->language->get('text_oct_terms'), $this->url->link('information/information', 'information_id=' . $this->config->get('config_account_id'), 'SSL'), $information_info['title'], $information_info['title']);
+	            } else {
+	                $data['text_terms'] = '';
+	            }
+	        } else {
+	            $data['text_terms'] = '';
+	        }
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$data['button_submit'] = $this->language->get('button_submit');]]></search>
+			<add position="before"><![CDATA[
+			if (isset($this->error['scales'])) {
+				$data['error_oct_terms'] = $this->error['scales'];
+			} else {
+				$data['error_oct_terms'] = '';
+			}
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[return !$this->error;]]></search>
+			<add position="before"><![CDATA[
+	        if ($this->config->get('config_account_id') && !isset($this->request->post['scales'])) {
+	            $this->load->model('catalog/information');
+
+	            $information_info = $this->model_catalog_information->getInformation($this->config->get('config_account_id'));
+
+	            $this->error['scales'] = sprintf($this->language->get('error_oct_terms'), $information_info['title']);
+	        }
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/common/maintenance.php">
+		<operation error="skip">
+			<search><![CDATA[$data['message'] = $this->language->get('text_message');]]></search>
+			<add position="before"><![CDATA[
+			$data['title'] = $this->language->get('text_maintenance');
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$data['header'] = $this->load->controller('common/header');]]></search>
+			<add position="replace"><![CDATA[
+			//$data['header'] = $this->load->controller('common/header');
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$data['footer'] = $this->load->controller('common/footer');]]></search>
+			<add position="replace"><![CDATA[
+			//$data['footer'] = $this->load->controller('common/footer');
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/language/ru-ru/ru-ru.php">
+		<operation error="skip">
+			<search regex="true"><![CDATA[~(;|;\n{1,})$~]]></search>
+			<add position="replace"><![CDATA[$1
+			include(DIR_LANGUAGE."ru-ru/octemplates/oct_ultrastore.php");
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/language/en-gb/en-gb.php">
+		<operation error="skip">
+			<search regex="true"><![CDATA[~(;|;\n{1,})$~]]></search>
+			<add position="replace"><![CDATA[$1
+			include(DIR_LANGUAGE."en-gb/octemplates/oct_ultrastore.php");
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/language/uk-ua/uk-ua.php">
+		<operation error="skip">
+			<search regex="true"><![CDATA[~(;|;\n{1,})$~]]></search>
+			<add position="replace"><![CDATA[$1
+			include(DIR_LANGUAGE."uk-ua/octemplates/oct_ultrastore.php");
+			]]></add>
+		</operation>
+	</file>
+</modification>

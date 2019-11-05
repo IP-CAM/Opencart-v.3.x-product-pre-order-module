@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<code>oct_popup_purchase</code>
+	<name>Octemplates - Popup Purchase</name>
+	<version>1.0.0</version>
+	<author>Octemplates</author>
+	<link>https://octemplates.net/</link>
+	<file path="catalog/controller/product/product.php">
+		<operation error="skip">
+			<search><![CDATA[$data['products'] = array();]]></search>
+			<add position="before"><![CDATA[
+			if ($this->config->get('config_checkout_guest') && $this->config->get('oct_popup_purchase_status')) {
+				$data['oct_popup_purchase_status'] = $this->config->get('oct_popup_purchase_status');
+			}
+
+			if ($this->config->get('config_checkout_guest') && $this->config->get('oct_popup_purchase_byoneclick_status')) {
+				$oct_byoneclick_data = $this->config->get('oct_popup_purchase_byoneclick_data');
+				$oct_data['oct_byoneclick_status'] = isset($oct_byoneclick_data['product']) ? 1 : 0;
+				$oct_data['oct_byoneclick_mask'] = $oct_byoneclick_data['mask'];
+				$oct_data['oct_byoneclick_product_id'] = $this->request->get['product_id'];
+				$oct_data['oct_byoneclick_page'] = '_product';
+				$data['oct_byoneclick'] = $this->load->controller('octemplates/module/oct_popup_purchase/byoneclick', $oct_data);
+			}
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/view/theme/oct_ultrastore/template/product/product.twig">
+		<!--    	<operation error="skip">-->
+		<!--			<search><![CDATA[<button type="button" id="button-cart" data-loading-text="{{ text_loading }}" class="us-product-btn us-product-btn-active">{{ button_cart }}</button>]]></search>-->
+		<!--			<add position="after"><![CDATA[-->
+		<!--			{% if oct_popup_purchase_status is defined %}-->
+		<!--			<button type="button" class="us-product-btn button-one-click" onclick="octPopPurchase('{{ product_id }}')">{{ oct_product_quickbuy }}</button>-->
+		<!--			{% endif %}-->
+		<!--			]]></add>-->
+		<!--    	</operation>-->
+		<!--    	<operation error="skip">-->
+		<!--			<search><![CDATA[{% for discount in discounts %}]]></search>-->
+		<!--			<add position="after" offset="4"><![CDATA[-->
+		<!--			{% if can_buy is not empty %}-->
+		<!--			{{ oct_byoneclick }}-->
+		<!--			{% endif %}-->
+		<!--			]]></add>-->
+		<!--    	</operation>-->
+		<operation error="skip">
+			<search><![CDATA[<button type="button" id="button-cart" data-loading-text="{{ text_loading }}" class="us-product-btn us-product-btn-active">{{ button_cart }}</button>]]></search>
+			<add position="after"><![CDATA[
+			{% if (oct_popup_purchase_status is defined and disable_buy == 0) %}
+			<button type="button" class="us-product-btn button-one-click" onclick="octPopPurchase('{{ product_id }}')">{{ oct_product_quickbuy }}</button>
+			{% endif %}
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[{% for discount in discounts %}]]></search>
+			<add position="after" offset="4"><![CDATA[
+			{% if (oct_popup_purchase_status is defined and disable_buy == 0) %}
+			{{ oct_byoneclick }}
+			{% endif %}
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/octemplates/module/oct_popup_view.php">
+		<operation error="skip">
+			<search><![CDATA[if ($product_info) {]]></search>
+			<add position="after"><![CDATA[
+			if ($this->config->get('config_checkout_guest') && $this->config->get('oct_popup_purchase_status')) {
+				$data['oct_popup_purchase_status'] = $this->config->get('oct_popup_purchase_status');
+			}
+
+			if ($this->config->get('config_checkout_guest') && $this->config->get('oct_popup_purchase_byoneclick_status')) {
+				$oct_byoneclick_data = $this->config->get('oct_popup_purchase_byoneclick_data');
+				$oct_data['oct_byoneclick_status'] = isset($oct_byoneclick_data['product_view']) ? 1 : 0;
+				$oct_data['oct_byoneclick_mask'] = $oct_byoneclick_data['mask'];
+				$oct_data['oct_byoneclick_product_id'] = $data['product_id'];
+				$oct_data['oct_byoneclick_page'] = '_product_view';
+				$data['oct_byoneclick'] = $this->load->controller('octemplates/module/oct_popup_purchase/byoneclick', $oct_data);
+			}
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/view/theme/oct_ultrastore/template/octemplates/module/oct_popup_view.twig">
+		<!--		<operation error="skip">-->
+		<!--			<search><![CDATA[<button type="button" id="oct-popup-button-cart" data-loading-text="{{ text_loading }}" class="us-product-btn us-product-btn-active">{{ button_cart }}</button>]]></search>-->
+		<!--			<add position="after"><![CDATA[-->
+		<!--			{% if oct_popup_purchase_status is defined %}-->
+		<!--			<button type="button" class="us-product-btn" onclick="octPopPurchase('{{ product_id }}')">{{ oct_product_quickbuy }}</button>-->
+		<!--			{% endif %}-->
+		<!--			]]></add>-->
+		<!--		</operation>-->
+		<!--		<operation error="skip">-->
+		<!--			<search><![CDATA[{% for discount in discounts %}]]></search>-->
+		<!--			<add position="after" offset="4"><![CDATA[-->
+		<!--			{% if can_buy is not empty %}-->
+		<!--			{{ oct_byoneclick }}-->
+		<!--			{% endif %}-->
+		<!--			]]></add>-->
+		<!--		</operation>-->
+		<operation error="skip">
+			<search><![CDATA[<button type="button" id="oct-popup-button-cart" data-loading-text="{{ text_loading }}" class="us-product-btn us-product-btn-active">{{ button_cart }}</button>]]></search>
+			<add position="after"><![CDATA[
+			{% if oct_popup_purchase_status is defined and disable_buy == 0 %}
+			<button type="button" class="us-product-btn" onclick="octPopPurchase('{{ product_id }}')">{{ oct_product_quickbuy }}</button>
+			{% endif %}
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[{% for discount in discounts %}]]></search>
+			<add position="after" offset="4"><![CDATA[
+			{% if disable_buy == 0 %}
+			{{ oct_byoneclick }}
+			{% endif %}
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/octemplates/module/oct_popup_cart.php">
+		<operation error="skip">
+			<search><![CDATA[$products = $this->cart->getProducts();]]></search>
+			<add position="after"><![CDATA[
+			if (($this->config->get('config_checkout_guest') && $this->config->get('oct_popup_purchase_byoneclick_status')) && $products) {
+				$oct_byoneclick_data = $this->config->get('oct_popup_purchase_byoneclick_data');
+				$oct_data['oct_byoneclick_status'] = isset($oct_byoneclick_data['popup_cart']) ? 1 : 0;
+				$oct_data['oct_byoneclick_mask'] = $oct_byoneclick_data['mask'];
+				$oct_data['oct_byoneclick_product_id'] = $oct_data['oct_cart_in'] = $oct_data['oct_popup_cart'] = 1;
+				$oct_data['oct_byoneclick_page'] = '_popup_cart';
+				$data['oct_byoneclick'] = $this->load->controller('octemplates/module/oct_popup_purchase/byoneclick', $oct_data);
+			}
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/view/theme/oct_ultrastore/template/octemplates/module/oct_popup_cart.twig">
+		<operation error="skip">
+			<search><![CDATA[<a href="{{ checkout_link }}" class="us-module-btn us-module-btn-green">{{ button_checkout }}</a>]]></search>
+			<add position="after"><![CDATA[
+			{{ oct_byoneclick }}
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/checkout/cart.php">
+		<operation error="skip">
+			<search><![CDATA[$products = $this->cart->getProducts();]]></search>
+			<add position="after"><![CDATA[
+			if (($this->config->get('config_checkout_guest') && $this->config->get('oct_popup_purchase_byoneclick_status')) && $products) {
+				$oct_byoneclick_data = $this->config->get('oct_popup_purchase_byoneclick_data');
+				$oct_data['oct_byoneclick_status'] = isset($oct_byoneclick_data['cart']) ? 1 : 0;
+				$oct_data['oct_byoneclick_mask'] = $oct_byoneclick_data['mask'];
+				$oct_data['oct_byoneclick_product_id'] = $oct_data['oct_cart_in'] = 1;
+				$oct_data['oct_byoneclick_page'] = '_cart';
+				$data['oct_byoneclick'] = $this->load->controller('octemplates/module/oct_popup_purchase/byoneclick', $oct_data);
+			}
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/view/theme/oct_ultrastore/template/checkout/cart.twig">
+		<operation error="skip">
+			<search><![CDATA[<div class="us-cart-block-total-wrapper d-flex align-items-center justify-content-between">]]></search>
+			<add position="after"><![CDATA[
+			{{ oct_byoneclick }}
+			]]></add>
+		</operation>
+	</file>
+</modification>
