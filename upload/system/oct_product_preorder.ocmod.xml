@@ -421,7 +421,7 @@
 				{% elseif disable_buy == 1 %}
 				<button type="button" id="preorder-cart" data-loading-text="{{ text_loading }}" onclick="get_oct_product_preorder('{{ product_id }}')" class="us-product-btn us-product-btn-preorder us-product-btn-active">{{ stockbutton }}</button>
 				{% else %}
-				<button type="button" id="button-cart" data-loading-text="{{ text_loading }}" onclick="javascript:void(0)" class="us-product-btn us-product-btn-in-active">{{ stock_button }}</button>
+				<button type="button" id="button-cart" data-loading-text="{{ text_loading }}" onclick="javascript:void(0)" class="us-product-btn us-product-btn-in-active">{{ stockbutton }}</button>
 				{% endif %}
 			]]></add>
 		</operation>

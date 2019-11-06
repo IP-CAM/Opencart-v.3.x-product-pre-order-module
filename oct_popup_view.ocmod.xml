@@ -51,7 +51,7 @@
 		<operation>
 			<search><![CDATA[<a href="javascript:void(0);" class="us-module-buttons-link us-module-buttons-compare" title="{{ button_compare }}" onclick="compare.add('{{ product.product_id }}');"><i class="fas fa-sliders-h"></i></a>]]></search>
 			<add position="after" offset="1"><![CDATA[
-			{% if oct_popup_view_status and quantity > 0 %}
+			{% if oct_popup_view_status and product.quantity > 0 %}
 			<li class="us-module-buttons-item">
 				<a href="javascript:void(0);" class="us-module-buttons-link us-module-buttons-quickview" title="Быстрый просмотр" onclick="octPopUpView('{{ product.product_id }}')"><i class="far fa-eye"></i></a>
 			</li>
@@ -73,7 +73,7 @@
 		<operation>
 			<search><![CDATA[<a href="javascript:void(0);" class="us-module-buttons-link us-module-buttons-compare" title="{{ button_compare }}" onclick="compare.add('{{ product.product_id }}');"><i class="fas fa-sliders-h"></i></a>]]></search>
 			<add position="after" offset="1"><![CDATA[
-			{% if oct_popup_view_status and quantity > 0 %}
+			{% if oct_popup_view_status and product.quantity > 0 %}
 			<li class="us-module-buttons-item">
 				<a href="javascript:void(0);" class="us-module-buttons-link us-module-buttons-quickview" title="Быстрый просмотр" onclick="octPopUpView('{{ product.product_id }}')"><i class="far fa-eye"></i></a>
 			</li>
@@ -95,7 +95,7 @@
 		<operation>
 			<search><![CDATA[<a href="javascript:void(0);" class="us-module-buttons-link us-module-buttons-compare" title="{{ button_compare }}" onclick="compare.add('{{ product.product_id }}');"><i class="fas fa-sliders-h"></i></a>]]></search>
 			<add position="after" offset="1"><![CDATA[
-			{% if oct_popup_view_status and quantity > 0 %}
+			{% if oct_popup_view_status and product.quantity > 0 %}
 			<li class="us-module-buttons-item">
 				<a href="javascript:void(0);" class="us-module-buttons-link us-module-buttons-quickview" title="Быстрый просмотр" onclick="octPopUpView('{{ product.product_id }}')"><i class="far fa-eye"></i></a>
 			</li>
@@ -117,7 +117,7 @@
 		<operation>
 			<search><![CDATA[<a href="javascript:void(0);" class="us-module-buttons-link us-module-buttons-compare" title="{{ button_compare }}" onclick="compare.add('{{ product.product_id }}');"><i class="fas fa-sliders-h"></i></a>]]></search>
 			<add position="after" offset="1"><![CDATA[
-			{% if oct_popup_view_status and quantity > 0 %}
+			{% if oct_popup_view_status and product.quantity > 0 %}
 			<li class="us-module-buttons-item">
 				<a href="javascript:void(0);" class="us-module-buttons-link us-module-buttons-quickview" title="Быстрый просмотр" onclick="octPopUpView('{{ product.product_id }}')"><i class="far fa-eye"></i></a>
 			</li>
@@ -139,7 +139,7 @@
 		<operation>
 			<search><![CDATA[<a href="javascript:void(0);" title="{{ button_compare }}" onclick="compare.add('{{ product.product_id }}');" class="us-module-buttons-link us-module-buttons-compare"><i class="fas fa-sliders-h"></i></a>]]></search>
 			<add position="after" offset="1"><![CDATA[
-			{% if oct_popup_view_status and quantity > 0 %}
+			{% if oct_popup_view_status and product.quantity > 0 %}
 			<li class="us-module-buttons-item">
 				<a href="javascript:void(0);" class="us-module-buttons-link us-module-buttons-quickview" title="Быстрый просмотр" onclick="octPopUpView('{{ product.product_id }}')"><i class="far fa-eye"></i></a>
 			</li>
